@@ -1,10 +1,11 @@
 # Migración de odoo en XMLRCP semi automatizada (poor man’s migration)
 
 ## ¿Porque?
-El proceso de migración siempre es difícil. El trabajo de un upgrade de versión odoo debería centrarse en cómo el deploy, en organizamos los workflow, qué módulos instalamos. No en pasar datos.  
+Una migración es siempre  difícil. 
+El trabajo de upgrade de versión de odoo debería centrarse en cómo realizo el deploy, en organizar los workflow, qué módulos instalamos. No en pasar datos.  
 
 **Las instalaciones de odoo** son diferentes y muy customizadas. Hay módulos que salen o entran en el core (claim, city) o cambian de desarrollador (product pack).
-El **openupgrade** podria solucionar una migración, pero muchos módulos no tienen soporte.
+**openupgrade** da una solución, pero muchos módulos no tienen soporte.
 Migrar de 8 a 13 implicaría generar 5 instalaciones y escribir y verificar las 5 migraciones de todos los módulos no soportados. (por ejemplo múltiples localizaciones, product pack, etc) 
 
 ## ¿como funciona?
