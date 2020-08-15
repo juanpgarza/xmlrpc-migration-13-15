@@ -11,7 +11,9 @@ class odoo_xmlrcp_migration(object):
     chunk_size = 100
     is_test = False
     cache = {'plans': {}, 'external_ids': {}}
-    system_fields = ['id', 'write_date', 'write_uid', 'create_date', 'create_uid', '__last_update']
+    system_fields = ['id', 'write_date', 'write_uid',
+                     'create_date', 'create_uid', '__last_update']
+    order = 'id asc'
 
     def __init__(self, config_file='/etc/odoo_xmlrcp_migration.conf'):
         self.config = ConfigParser()
@@ -23,14 +25,16 @@ class odoo_xmlrcp_migration(object):
             'pwd': self.config.get("odooserver_1", 'pwd'),
             'url': self.config.get("odooserver_1", 'url'),
         }
-        self.socks['from']['sock_common'] = xmlrpclib.ServerProxy(self.socks['from']['url'] + 'xmlrpc/common')
+        self.socks['from']['sock_common'] = xmlrpclib.ServerProxy(
+            self.socks['from']['url'] + 'xmlrpc/common')
 
         self.socks['from']['uid'] = self.socks['from']['sock_common'].login(
             self.socks['from']['dbname'],
             self.socks['from']['username'],
             self.socks['from']['pwd']
         )
-        self.socks['from']['sock'] = xmlrpclib.ServerProxy(self.socks['from']['url'] + 'xmlrpc/object')
+        self.socks['from']['sock'] = xmlrpclib.ServerProxy(
+            self.socks['from']['url'] + 'xmlrpc/object')
 
         self.socks['to'] = {
             'dbname': self.config.get("odooserver_2", 'dbname'),
@@ -38,14 +42,16 @@ class odoo_xmlrcp_migration(object):
             'pwd': self.config.get("odooserver_2", 'pwd'),
             'url': self.config.get("odooserver_2", 'url'),
         }
-        self.socks['to']['sock_common'] = xmlrpclib.ServerProxy(self.socks['to']['url'] + 'xmlrpc/common')
+        self.socks['to']['sock_common'] = xmlrpclib.ServerProxy(
+            self.socks['to']['url'] + 'xmlrpc/common')
 
         self.socks['to']['uid'] = self.socks['to']['sock_common'].login(
             self.socks['to']['dbname'],
             self.socks['to']['username'],
             self.socks['to']['pwd']
         )
-        self.socks['to']['sock'] = xmlrpclib.ServerProxy(self.socks['to']['url'] + 'xmlrpc/object')
+        self.socks['to']['sock'] = xmlrpclib.ServerProxy(
+            self.socks['to']['url'] + 'xmlrpc/object')
 
     def clean_cache(self):
         self.cache = {'plans': {}, 'external_ids': {}}
@@ -58,7 +64,8 @@ class odoo_xmlrcp_migration(object):
     def fields_get(self, server, model, ignore_readonly=False):
         server = self.socks[server]
         sock = server['sock']
-        leaf = [('model_id.model', '=', model), ('name', 'not in', self.system_fields)]
+        leaf = [('model_id.model', '=', model),
+                ('name', 'not in', self.system_fields)]
         if ignore_readonly:
             leaf += [('readonly', '=', False)]
         f = sock.execute(
@@ -87,7 +94,8 @@ class odoo_xmlrcp_migration(object):
                 fields[fields_from[field]['modules']] = {}
             # if not fields_to[field].get('store', True):
             #    continue
-            fields[fields_from[field]['modules']][field] = self.dump_config_field(field, fields_from, fields_to)
+            fields[fields_from[field]['modules']][
+                field] = self.dump_config_field(field, fields_from, fields_to)
         diff = keys_from - keys_to
         for field in list(diff):
 
@@ -96,31 +104,37 @@ class odoo_xmlrcp_migration(object):
                 no_match_fields[fields_from[field]['modules']] = {}
             # if not fields_to[field].get('store', True):
             #    continue
-            no_match_fields[fields_from[field]['modules']][field] = self.dump_config_field(field, fields_from, fields_to)
+            no_match_fields[fields_from[field]['modules']][
+                field] = self.dump_config_field(field, fields_from, fields_to)
 
         return fields, no_match_fields
 
     def dump_config_field(self, field, fields_from, fields_to):
         field_temp = {}
         if field in fields_from:
-            field_temp['from'] = {'name': field, 'type': fields_from[field]['ttype']}
+            field_temp['from'] = {'name': field,
+                                  'type': fields_from[field]['ttype']}
             if fields_from[field]['relation']:
                 field_temp['from']['relation'] = fields_from[field]['relation']
             if fields_from[field]['relation_field']:
-                field_temp['from']['relation_field'] = fields_from[field]['relation_field']
+                field_temp['from']['relation_field'] = fields_from[
+                    field]['relation_field']
 
         if field in fields_to:
-            field_temp['to'] = {'name': field, 'type': fields_to[field]['ttype']}
+            field_temp['to'] = {'name': field,
+                                'type': fields_to[field]['ttype']}
 
             if fields_to[field]['relation']:
                 field_temp['to']['relation'] = fields_to[field]['relation']
             if fields_to[field]['relation_field']:
-                field_temp['to']['relation_field'] = fields_to[field]['relation_field']
+                field_temp['to']['relation_field'] = fields_to[
+                    field]['relation_field']
         if field in fields_to and field in fields_from:
             if fields_to[field]['ttype'] == fields_to[field]['ttype']:
                 field_temp['map_method'] = 'magic_map'
             else:
-                field_temp['map_method'] = '%s2%s' % (fields_from[field]['ttype'] == fields_from[field]['ttype'])
+                field_temp['map_method'] = '%s2%s' % (
+                    fields_from[field]['ttype'] == fields_from[field]['ttype'])
         return field_temp
 
     def ensure_dir(self, file_path):
@@ -136,11 +150,14 @@ class odoo_xmlrcp_migration(object):
         data['domain'] = []
         data['external_id_nomenclature'] = model_from.replace('.', '_') + "_%s"
         data['external_id_method'] = 'row_get_id'
-        fields_by_module, no_match_fields = self.compare_model(model_from, model_to)
+        fields_by_module, no_match_fields = self.compare_model(
+            model_from, model_to)
         model_name = model_from.replace('.', '_')
         for module in fields_by_module:
-            data['fields'] = fields_by_module[module] if module in fields_by_module else []
-            data['no_match_fields'] = no_match_fields[module] if module in no_match_fields else []
+            data['fields'] = fields_by_module[
+                module] if module in fields_by_module else []
+            data['no_match_fields'] = no_match_fields[
+                module] if module in no_match_fields else []
             file_name = '%s/%s/%s.yaml' % (self.data_dir, module, model_name)
             self.ensure_dir(file_name)
             with open(file_name, 'w+') as file:
@@ -164,7 +181,7 @@ class odoo_xmlrcp_migration(object):
             except IOError:
                 pass
         if len(result) == 0:
-            print ("Not exists plan for %s" % model_from)
+            print("Not exists plan for %s" % model_from)
         self.cache['plans'][model_name] = result
         return result
 
@@ -175,7 +192,8 @@ class odoo_xmlrcp_migration(object):
         plan = self.load_plan(model_name)
         res_ids = {'create': [], 'write': []}
         field_names = plan['fields'].keys()
-        after_save_fields = plan['after_save_fields'].keys() if 'after_save_fields' in plan else []
+        after_save_fields = plan['after_save_fields'].keys(
+        ) if 'after_save_fields' in plan else []
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
             print "remuevo %s de %s " % (kwargs['ignore_field'], model_name)
             field_names.remove(kwargs['ignore_field'])
@@ -184,16 +202,20 @@ class odoo_xmlrcp_migration(object):
             row_ids = kwargs['row_ids']
         else:
             model_domain = kwargs['domain'] if 'domain' in kwargs else []
-            row_ids = self.get_ids(plan['model_from'], plan['domain'] + model_domain + self.domain)
-        chunk = [row_ids[i:i + self.chunk_size] for i in xrange(0, len(row_ids), self.chunk_size)]
+            row_ids = self.get_ids(plan['model_from'], plan[
+                                   'domain'] + model_domain + self.domain)
+        chunk = [row_ids[i:i + self.chunk_size]
+                 for i in xrange(0, len(row_ids), self.chunk_size)]
         for ids in chunk:
-            rows = self.read(plan['model_from'], ids, field_names + after_save_fields)
+            rows = self.read(plan['model_from'], ids,
+                             field_names + after_save_fields)
             for row in rows:
                 data = self.map_data(plan, row, kwargs)
                 action, model, res_id = self.save(plan, data, row['id'])
                 res_ids[action].append(res_id)
                 if len(after_save_fields):
-                    data = self.map_data(plan, row, kwargs, 'after_save_fields')
+                    data = self.map_data(
+                        plan, row, kwargs, 'after_save_fields')
                     self.save(plan, data, row['id'])
 
             if self.is_test:
@@ -202,10 +224,11 @@ class odoo_xmlrcp_migration(object):
 
     def save(self, plan, values, orig_id):
         external_id_method = getattr(self, plan['external_id_method'])
-        ext_id = external_id_method(plan, orig_id, plan['external_id_nomenclature'])
+        ext_id = external_id_method(
+            plan, orig_id, plan['external_id_nomenclature'])
         server = self.socks['to']
         sock = server['sock']
-        if len(ext_id):
+        if ext_id and len(ext_id):
             try:
 
                 sock.execute(
@@ -217,10 +240,10 @@ class odoo_xmlrcp_migration(object):
                     [ext_id[0]['res_id']],
                     values
                 )
-                print ('write %s %s' % (plan['model_to'], ext_id[0]['res_id']))
+                print('write %s %s' % (plan['model_to'], ext_id[0]['res_id']))
                 return ('write', plan['model_to'], ext_id)
             except xmlrpclib.Fault, e:
-                print (e.faultCode)
+                print(e.faultCode)
                 return ('write', plan['model_to'], False)
 
         else:
@@ -233,17 +256,20 @@ class odoo_xmlrcp_migration(object):
                     'create',
                     [values]
                 )
-                print ('create %s %s' % (plan['model_to'], res_id[0]))
-                self.add_external_id(plan['model_to'], orig_id, res_id[0], plan['external_id_nomenclature'])
+                print('create %s %s' % (plan['model_to'], res_id[0]))
+                self.add_external_id(plan['model_to'], orig_id, res_id[
+                                     0], plan['external_id_nomenclature'])
                 return ('create', plan['model_to'], res_id[0])
             except xmlrpclib.Fault, e:
-                print (e.faultCode)
+                print(e.faultCode)
                 return ('create', plan['model_to'], False)
 
     def get_ids(self, model, domain):
         server = self.socks['from']
         sock = server['sock']
-        return sock.execute(server['dbname'], server['uid'], server['pwd'], model, 'search', domain)
+        return sock.execute(server['dbname'], server['uid'], server['pwd'], model, 'search',
+                            domain, 0, False, self.order
+                            )
 
     def read(self, model, ids, fields):
         server = self.socks['from']
@@ -267,8 +293,10 @@ class odoo_xmlrcp_migration(object):
             f = plan[field_collection][field]
             if f['from']['name'] not in row:
                 continue
-            map_method = getattr(self, f['map_method'] if 'map_method' in f else 'magic_map')
-            val = map_method(row[f['from']['name']], field, plan, row,field_collection)
+            map_method = getattr(
+                self, f['map_method'] if 'map_method' in f else 'magic_map')
+            val = map_method(row[f['from']['name']], field,
+                             plan, row, field_collection)
             default_value = self.get_default(field, kwargs)
             if val is not None or default_value is not None:
                 maping[f['to']['name']] = val if val is not None else default_value
@@ -310,8 +338,9 @@ class odoo_xmlrcp_migration(object):
             if len(subplan) == 0:
                 return None
             external_id_method = getattr(self, subplan['external_id_method'])
-            ext_id = external_id_method(subplan, value[0], row, field_data.get('cache', False))
-            if len(ext_id):
+            ext_id = external_id_method(
+                subplan, value[0], row, field_data.get('cache', False))
+            if ext_id and len(ext_id):
                 return ext_id[0]['res_id']
             else:
                 new = self.migrate(
@@ -360,7 +389,8 @@ class odoo_xmlrcp_migration(object):
         if cache and len(res):
             if plan['model_from'] not in self.cache['external_ids']:
                 self.cache['external_ids'][plan['model_from']] = {}
-            self.cache['external_ids'][plan['model_from']][value] = res[0]['res_id']
+            self.cache['external_ids'][plan['model_from']][
+                value] = res[0]['res_id']
 
         return res
 
@@ -405,13 +435,15 @@ class odoo_xmlrcp_migration(object):
                 server['pwd'],
                 'ir.model.data',
                 'search_read',
-                [('name', '=', external_id[0]['name']), ('model', '=', plan['model_to'])],
+                [('name', '=', external_id[0]['name']),
+                 ('model', '=', plan['model_to'])],
                 ['res_id']
             )
             if cache:
                 if plan['model_from'] not in self.cache['external_ids']:
                     self.cache['external_ids'][plan['model_from']] = {}
-                self.cache['external_ids'][plan['model_from']][res_id] = res[0]['res_id']
+                self.cache['external_ids'][plan['model_from']][
+                    res_id] = res[0]['res_id']
             return res
 
         return None
@@ -438,13 +470,15 @@ class odoo_xmlrcp_migration(object):
                 server['pwd'],
                 plan['model_to'],
                 'search',
-                [(plan['external_id_field_to'], '=', external_field_value[0][plan['external_id_field_from']])]
+                [(plan['external_id_field_to'], '=', external_field_value[0][plan[
+                  'external_id_field_from']]), '|', ('active', '=', False), ('active', '=', True)]
             )
             if len(external_id):
                 if cache:
                     if plan['model_from'] not in self.cache['external_ids']:
                         self.cache['external_ids'][plan['model_from']] = {}
-                    self.cache['external_ids'][plan['model_from']][res_id] = external_id[0]
+                    self.cache['external_ids'][plan['model_from']][
+                        res_id] = external_id[0]
 
                 return [{'res_id': external_id[0]}]
         return None
