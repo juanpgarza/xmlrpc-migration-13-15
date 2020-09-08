@@ -3,6 +3,7 @@ from xmlrpc import client as xmlrpclib
 import yaml
 import os
 
+from inspect import getouterframes, currentframe, stack
 
 class odoo_xmlrcp_migration(object):
     socks = {}
@@ -11,6 +12,7 @@ class odoo_xmlrcp_migration(object):
     chunk_size = 100
     is_test = False
     cache = {'plans': {}, 'external_ids': {}}
+    max_stack = 40
     system_fields = ['id', 'write_date', 'write_uid',
                      'create_date', 'create_uid', '__last_update']
     order = 'id asc'
@@ -330,7 +332,10 @@ class odoo_xmlrcp_migration(object):
                         ignore_field=ignore_field
 
                     )
-                    res_ids.append(new['create'][0])
+                    if len(new['create']):
+                        res_ids.append(new['create'][0])
+                    else:
+                        res_ids = []
             return [(6, 0, res_ids)]
 
         elif field_data['from']['type'] in ['many2one'] and value:
@@ -343,11 +348,18 @@ class odoo_xmlrcp_migration(object):
             if ext_id and len(ext_id):
                 return ext_id[0]['res_id']
             else:
+                if len(stack(0)) > 20:
+                    return None
+
                 new = self.migrate(
                     field_data['from']['relation'],
                     row_ids=[value[0]]
                 )
-                return new['create'][0]
+                if len(new['create']):
+                    return new['create'][0]
+                else:
+                    return None
+
         elif field_data['from']['type'] in ['many2many']:
             subplan = self.load_plan(field_data['from']['relation'])
             if not subplan:
@@ -356,7 +368,7 @@ class odoo_xmlrcp_migration(object):
             res_ids = []
             for res_id in value:
                 ext_id = external_id_method(subplan, res_id, row)
-                if len(ext_id):
+                if ext_id and len(ext_id):
                     res_ids.append(ext_id[0]['res_id'])
                 else:
                     new = self.migrate(
@@ -448,6 +460,19 @@ class odoo_xmlrcp_migration(object):
 
         return None
 
+    def get_external_id(self, model, external_id, server='to'):
+        server = self.socks[server]
+        sock = server['sock']
+        return sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.data',
+            'search_read',
+            [('name', '=', external_id), ('model', '=', model)],
+            ['res_id']
+        )
+
     def match_field(self, plan, res_id, row, cache=False):
         server = self.socks['from']
         sock = server['sock']
@@ -464,14 +489,16 @@ class odoo_xmlrcp_migration(object):
 
             server = self.socks['to']
             sock = server['sock']
+            leaf = [(plan['external_id_field_to'], '=', external_field_value[0][plan['external_id_field_from']])]
+            if 'active' in plan['fields'].keys():
+                leaf += ['|', ('active', '=', False), ('active', '=', True)]
             external_id = sock.execute(
                 server['dbname'],
                 server['uid'],
                 server['pwd'],
                 plan['model_to'],
                 'search',
-                [(plan['external_id_field_to'], '=', external_field_value[0][plan[
-                  'external_id_field_from']]), '|', ('active', '=', False), ('active', '=', True)]
+                leaf
             )
             if len(external_id):
                 if cache:
@@ -482,3 +509,16 @@ class odoo_xmlrcp_migration(object):
 
                 return [{'res_id': external_id[0]}]
         return None
+
+    def get_row_data(self, model, res_ids, fields=[], server='from'):
+        server = self.socks[server]
+        sock = server['sock']
+        return sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            model,
+            'read',
+            res_ids,
+            fields
+        )

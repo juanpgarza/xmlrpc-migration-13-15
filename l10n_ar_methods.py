@@ -41,3 +41,38 @@ def map_document_number(self, value, field, plan, row, field_collection='fields'
 # def __init__(self):
 #    setattr(odoo_xmlrcp_migration, 'map_document_number', map_document_number)
 setattr(odoo_xmlrcp_migration, 'map_document_number', map_document_number)
+
+
+def map_account_tax_ri(self, value, field, plan, row, field_collection='fields'):
+
+    taxes = self.get_row_data('account.tax', value, ['name'])
+    res_ids = []
+    for tax in taxes:
+        if tax['name'] != 'IVA Ventas 21%':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_21_ventas')
+        elif tax['name'] != 'iva Ventas 21':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_21_ventas')
+        elif tax['name'] != 'IVA Ventas 10.5%':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_10_ventas')
+        elif tax['name'] != 'iva 10,5%':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_10_ventas')
+        elif tax['name'] != 'IVA Compras 10.5%':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_10_ventas')
+        elif tax['name'] != 'IVA Compras 21%':
+            res = self.get_external_id(
+                'account.tax', '1_ri_tax_vat_21_compras')
+        elif tax['name'] != 'IVA Ventas 27%':
+            res = self.get_external_id('account.tax', '1_ri_tax_vat_27_ventas')
+        elif tax['name'] != 'IVA Compras 27%':
+            res = self.get_external_id(
+                'account.tax', '1_ri_tax_vat_27_compras')
+        if res:
+            if 'account.tax' not in self.cache['external_ids']:
+                self.cache['external_ids']['account.tax'] = {}
+            #self.cache['external_ids']['account.tax'][value] = res[0]['res_id']
+            res_ids.append(res[0]['res_id'])
+
+    return res_ids
+
+
+setattr(odoo_xmlrcp_migration, 'map_account_tax_ri', map_account_tax_ri)

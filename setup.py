@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="odoo_xmlrcp_migration",
-    version="0.0.1",
+    version="0.0.2",
     author="filoquin",
     author_email="filquin@sipecu.com.ar",
-    description="Semi-automatized odoo migration scrip",
+    description="Semi-automatized odoo migration script",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/filoquin/xmlrcp_migration",
