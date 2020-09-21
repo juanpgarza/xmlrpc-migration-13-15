@@ -1,4 +1,4 @@
-from . import odoo_xmlrcp_migration
+from . import odoo_xmlrpc_migration
 
 
 def check_module_state(self, module, server='to'):
@@ -15,7 +15,7 @@ def check_module_state(self, module, server='to'):
     )
 
 
-setattr(odoo_xmlrcp_migration, 'check_module_state', check_module_state)
+setattr(odoo_xmlrpc_migration, 'check_module_state', check_module_state)
 
 
 def install_module(self, module, server='to'):
@@ -33,4 +33,4 @@ def install_module(self, module, server='to'):
         )
 
 
-setattr(odoo_xmlrcp_migration, 'install_module', install_module)
+setattr(odoo_xmlrpc_migration, 'install_module', install_module)

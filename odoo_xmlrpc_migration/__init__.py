@@ -5,7 +5,8 @@ import os
 
 from inspect import getouterframes, currentframe, stack
 
-class odoo_xmlrcp_migration(object):
+
+class odoo_xmlrpc_migration(object):
     socks = {}
     modules = ['base']
     domain = []
@@ -17,7 +18,7 @@ class odoo_xmlrcp_migration(object):
                      'create_date', 'create_uid', '__last_update']
     order = 'id asc'
 
-    def __init__(self, config_file='/etc/odoo_xmlrcp_migration.conf'):
+    def __init__(self, config_file='/etc/odoo_xmlrpc_migration.conf'):
         self.config = ConfigParser()
         self.config.read(config_file)
         self.data_dir = self.config.get("yalm", 'path')
@@ -175,7 +176,7 @@ class odoo_xmlrcp_migration(object):
             try:
                 with open('%s/%s/%s.yaml' % (self.data_dir, module, model_name)) as file:
                     # data = yaml.full_load(file)
-                    data = yaml.load(file)
+                    data = yaml.load(file, Loader=yaml.FullLoader)
                     if not len(result):
                         result = data
                     else:
@@ -195,8 +196,7 @@ class odoo_xmlrcp_migration(object):
         plan = self.load_plan(model_name)
         res_ids = {'create': [], 'write': []}
         field_names = plan['fields'].keys()
-        after_save_fields = plan['after_save_fields'].keys(
-        ) if 'after_save_fields' in plan else []
+        after_save_fields = list(plan['after_save_fields'].keys()) if 'after_save_fields' in plan else []
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
             print("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
             field_names.remove(kwargs['ignore_field'])
@@ -212,8 +212,8 @@ class odoo_xmlrcp_migration(object):
         old_field_names = field_names
         field_names = []
         for field_name in old_field_names:
-        	field_names.append(field_name)
-        for ids in chunk:		
+            field_names.append(field_name)
+        for ids in chunk:
             rows = self.read(plan['model_from'], ids,
                              field_names + after_save_fields)
             for row in rows:
@@ -494,7 +494,8 @@ class odoo_xmlrcp_migration(object):
 
             server = self.socks['to']
             sock = server['sock']
-            leaf = [(plan['external_id_field_to'], '=', external_field_value[0][plan['external_id_field_from']])]
+            leaf = [(plan['external_id_field_to'], '=', external_field_value[
+                     0][plan['external_id_field_from']])]
             if 'active' in plan['fields'].keys():
                 leaf += ['|', ('active', '=', False), ('active', '=', True)]
             external_id = sock.execute(
