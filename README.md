@@ -1,27 +1,22 @@
-# Migración de odoo en XMLRCP semi automatizada (poor man’s migration)
+# Semi-automated Odoo migration process with XMLRPC
 
-## ¿Porque?
-Una migración es siempre  difícil. 
-El trabajo de upgrade de versión de odoo debería centrarse en cómo realizo el deploy, en organizar los workflow, qué módulos instalamos. No en pasar datos.  
+## Why Odoo migration needs to be automated as much as possible?
+Migrating any ERP system is hard, Odoo included. We are not going to explain why. We only need to know that it is hard. The idea is; the Odoo upgrade work should focus on doing the new version deploy, how new workflows are performed and which new modules are installed. Odoo upgrade should not focus on how data is moved from one version to the next.
+Odoo installations are different and highly customized. Each version removes or adds modules to the core (for instance, claim or city) or change module maintainer (product_pack). OpenUpgrade is a solution to this problem, but many modules do not have any support for this. Plus, OpenUpgrade requires you to migrate from version to the next version. Therefore, in order to migrate from version 8 to 13 you need to create 5 different sites and write and verify each of the 5 migrations of all the not supported modules (for instance, multiple localizations, product_pack, etc).
 
-**Las instalaciones de odoo** son diferentes y muy customizadas. Hay módulos que salen o entran en el core (claim, city) o cambian de desarrollador (product pack).
-**openupgrade** da una solución, pero muchos módulos no tienen soporte.
-Migrar de 8 a 13 implicaría generar 5 instalaciones y escribir y verificar las 5 migraciones de todos los módulos no soportados. (por ejemplo múltiples localizaciones, product pack, etc) 
-
-## ¿como funciona?
-Migración recursiva basada en una librería que transfiere datos via XMLRCP y un plan de migración repetible, reutilizable y realizable en etapas. Las instrucciones de migración son archivos yaml y py.
-Es recusiva porque el modelo sale.order tira de las lineas, las lineas tiran de los productos, y tambien de los partner, usuarios, equipos de ventas etc)
+## How does it work?
+Recursive migration process based on a python library that transfers data with XMLRPC and a repeatable, reusable migration plan that can be carried out in different stages. The migration steps are stored in yaml and python files. Why do we say it is a recursive process? Because in order to migrate sale orders, the process migrates sale order lines and products, users, sales teams… etc.
 
 
-## Conceptos Base 
-* **ir.model.access:** Modelo de odoo usado para machear los registros entre un odoo y otro. Utilizo el de la base destino.
-* Plan de migración: Es un folder que engloba todos los archivos que describen la migración (yaml, py). podría haber un plan por cada versión de origen y destino(8_13, 11_13,etc)
-* **Módulos:** Una subcarpeta por cada módulo migrado (no necesariamente coinciden con  los módulos de odoo)
-* **Modelos:** Los modelos son archivos yaml que describen el modelo de origen y destino, campos a migrar (y sus respectivos nombres) como macheo los registros y como procesos los campos.
-* **Guión:** Una serie de instrucciones que se ejecutan sobre la clase odoo_xmlrcp_migration . Uno por cada migración.
+## Main ideas
+* **ir.model.access:** Odoo model used to match the source and target records. We use the one in the target database.
+* Migration plan: folder that holds all the migration related files (yaml and python files). You could have a different folder for each plan (8_13, 11_13, etc)
+* **Modules:** a subfolder for each migrated module (not necessarily matches with an Odoo module)
+* **Models:**  Models are yaml files that describe the source and target models, which fields to migrate (along with its names) and how to process the fields.
+* **Script:** Set of instructions which are executed with the class odoo_xmlrpc_migration. One script is executed for every migration.
 
-## Creación del plan.
-Para iniciar un plan puedo usar la función 
+## Plan creation.
+In order to start a plan you can run the following python instructions 
 ```python
 from odoo_xmlrcp_migration import odoo_xmlrcp_migration
 
@@ -30,9 +25,9 @@ plan = odoo_xmlrcp_migration('/etc/odoo_xmlrcp_migration2.conf')
 plan.save_plan('res.partner')
 ```
 
-## Ejecución de una migración.
-Origen. mi instalación activa.
-Destino: un odoo ya configurado sin datos. 
+## Migration execution.
+Source: my old Odoo site. 
+Target: a fresh Odoo no data.
 ```python
 from odoo_xmlrcp_migration import odoo_xmlrcp_migration
 plan = odoo_xmlrcp_migration('/etc/odoo_xmlrcp_migration2.conf')
@@ -45,12 +40,12 @@ plan.migrate('sale.order')
 ```
 
 ## To-do:
-* Cargar python de módulos de manera onfly con la carga de funciones python
-* Módulo en odoo destino que me permita modificar los datos de auditoría de los registros y bloquee los mensajes de creación, etc en destino.
-* Poder instalar con pip
-* Mejoras en generación de plan
-* Refactorizar código
-* Invitar a la comunidad a crear planes y módulos
+* Load on the fly python modules, in order to execute python methods as needed
+* Module in the target installation Odoo that allows you modify the audit information and blocks the creation messages
+* Pip installation support
+* Improvements to the plan creation
+* Refactor code
+* Invite community to contribute plans and modules.
 
 
 
