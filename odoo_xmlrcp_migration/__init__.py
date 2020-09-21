@@ -197,7 +197,7 @@ class odoo_xmlrcp_migration(object):
         after_save_fields = plan['after_save_fields'].keys(
         ) if 'after_save_fields' in plan else []
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
-            print "remuevo %s de %s " % (kwargs['ignore_field'], model_name)
+            print("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
             field_names.remove(kwargs['ignore_field'])
 
         if 'row_ids' in kwargs:
@@ -244,7 +244,7 @@ class odoo_xmlrcp_migration(object):
                 )
                 print('write %s %s' % (plan['model_to'], ext_id[0]['res_id']))
                 return ('write', plan['model_to'], ext_id)
-            except xmlrpclib.Fault, e:
+            except xmlrpclib.Fault as e:
                 print(e.faultCode)
                 return ('write', plan['model_to'], False)
 
@@ -262,7 +262,7 @@ class odoo_xmlrcp_migration(object):
                 self.add_external_id(plan['model_to'], orig_id, res_id[
                                      0], plan['external_id_nomenclature'])
                 return ('create', plan['model_to'], res_id[0])
-            except xmlrpclib.Fault, e:
+            except xmlrpclib.Fault as e:
                 print(e.faultCode)
                 return ('create', plan['model_to'], False)
 
