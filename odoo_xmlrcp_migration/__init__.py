@@ -174,7 +174,8 @@ class odoo_xmlrcp_migration(object):
         for module in self.modules:
             try:
                 with open('%s/%s/%s.yaml' % (self.data_dir, module, model_name)) as file:
-                    data = yaml.full_load(file)
+                    # data = yaml.full_load(file)
+                    data = yaml.load(file)
                     if not len(result):
                         result = data
                     else:
@@ -207,8 +208,12 @@ class odoo_xmlrcp_migration(object):
             row_ids = self.get_ids(plan['model_from'], plan[
                                    'domain'] + model_domain + self.domain)
         chunk = [row_ids[i:i + self.chunk_size]
-                 for i in xrange(0, len(row_ids), self.chunk_size)]
-        for ids in chunk:
+                 for i in range(0, len(row_ids), self.chunk_size)]
+        old_field_names = field_names
+        field_names = []
+        for field_name in old_field_names:
+        	field_names.append(field_name)
+        for ids in chunk:		
             rows = self.read(plan['model_from'], ids,
                              field_names + after_save_fields)
             for row in rows:
