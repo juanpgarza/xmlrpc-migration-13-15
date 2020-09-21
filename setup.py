@@ -11,7 +11,7 @@ setuptools.setup(
     description="Semi-automatized odoo migration script",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/filoquin/xmlrcp_migration",
+    url="https://github.com/odoo-xmlrpc-migration/xmlrpc_migration",
     packages=setuptools.find_packages(),
     package_data={},
     include_package_data=False,
