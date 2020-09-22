@@ -1,4 +1,4 @@
-from . import odoo_xmlrcp_migration
+from . import odoo_xmlrpc_migration
 
 
 def map_sale_order_state(self, value, field, plan, row, field_collection='fields'):
@@ -7,7 +7,7 @@ def map_sale_order_state(self, value, field, plan, row, field_collection='fields
         return 'sent'
     return value
 
-setattr(odoo_xmlrcp_migration, 'map_sale_order_state', map_sale_order_state)
+setattr(odoo_xmlrpc_migration, 'map_sale_order_state', map_sale_order_state)
 
 
 def map_sale_order_state_line(self, value, field, plan, row, field_collection='fields'):
@@ -16,7 +16,7 @@ def map_sale_order_state_line(self, value, field, plan, row, field_collection='f
         return 'sent'
     return value
 
-setattr(odoo_xmlrcp_migration, 'map_sale_order_state_line',
+setattr(odoo_xmlrpc_migration, 'map_sale_order_state_line',
         map_sale_order_state_line)
 
 
@@ -27,7 +27,7 @@ def map_product_type(self, value, field, plan, row, field_collection='fields'):
     return value
 
 
-setattr(odoo_xmlrcp_migration, 'map_product_type', map_product_type)
+setattr(odoo_xmlrpc_migration, 'map_product_type', map_product_type)
 
 
 

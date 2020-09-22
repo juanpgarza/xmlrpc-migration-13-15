@@ -1,4 +1,4 @@
-from odoo_xmlrcp_migration import odoo_xmlrcp_migration
+from odoo_xmlrpc_migration import odoo_xmlrpc_migration
 import re
 
 
@@ -39,8 +39,8 @@ def map_document_number(self, value, field, plan, row, field_collection='fields'
 
 
 # def __init__(self):
-#    setattr(odoo_xmlrcp_migration, 'map_document_number', map_document_number)
-setattr(odoo_xmlrcp_migration, 'map_document_number', map_document_number)
+#    setattr(odoo_xmlrpc_migration, 'map_document_number', map_document_number)
+setattr(odoo_xmlrpc_migration, 'map_document_number', map_document_number)
 
 
 def map_account_tax_ri(self, value, field, plan, row, field_collection='fields'):
@@ -75,4 +75,4 @@ def map_account_tax_ri(self, value, field, plan, row, field_collection='fields')
     return res_ids
 
 
-setattr(odoo_xmlrcp_migration, 'map_account_tax_ri', map_account_tax_ri)
+setattr(odoo_xmlrpc_migration, 'map_account_tax_ri', map_account_tax_ri)

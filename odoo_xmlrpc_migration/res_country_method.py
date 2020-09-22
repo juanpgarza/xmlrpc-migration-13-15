@@ -1,4 +1,4 @@
-from . import odoo_xmlrcp_migration
+from . import odoo_xmlrpc_migration
 
 
 def res_country_map_external_id(self):
@@ -15,4 +15,4 @@ def res_country_map_external_id(self):
         ['complete_name', 'res_id', 'name']
     )
 
-setattr(odoo_xmlrcp_migration, 'res_country_map_external_id', res_country_map_external_id)
+setattr(odoo_xmlrpc_migration, 'res_country_map_external_id', res_country_map_external_id)
