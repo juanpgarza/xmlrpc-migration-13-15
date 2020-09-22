@@ -5,6 +5,9 @@ import os
 
 from inspect import getouterframes, currentframe, stack
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 
 class odoo_xmlrpc_migration(object):
     socks = {}
@@ -185,7 +188,8 @@ class odoo_xmlrpc_migration(object):
             except IOError:
                 pass
         if len(result) == 0:
-            print("Not exists plan for %s" % model_from)
+            #print("Not exists plan for %s" % model_from)
+            logging.debug("Not exists plan for %s" % model_from)
         self.cache['plans'][model_name] = result
         return result
 
@@ -198,7 +202,8 @@ class odoo_xmlrpc_migration(object):
         field_names = plan['fields'].keys()
         after_save_fields = list(plan['after_save_fields'].keys()) if 'after_save_fields' in plan else []
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
-            print("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
+            #print("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
+            logging.debug("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
             field_names.remove(kwargs['ignore_field'])
 
         if 'row_ids' in kwargs:
@@ -235,6 +240,8 @@ class odoo_xmlrpc_migration(object):
             plan, orig_id, plan['external_id_nomenclature'])
         server = self.socks['to']
         sock = server['sock']
+        #if 'customer_rank' in values and values['customer_rank']:
+        #    import pdb;pdb.set_trace()
         if ext_id and len(ext_id):
             try:
 
@@ -247,10 +254,12 @@ class odoo_xmlrpc_migration(object):
                     [ext_id[0]['res_id']],
                     values
                 )
-                print('write %s %s' % (plan['model_to'], ext_id[0]['res_id']))
+                #print('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
+                logging.debug('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
                 return ('write', plan['model_to'], ext_id)
             except xmlrpclib.Fault as e:
-                print(e.faultCode)
+                #print(e.faultCode)
+                logging.debug(e.faultCode)
                 return ('write', plan['model_to'], False)
 
         else:
@@ -263,12 +272,14 @@ class odoo_xmlrpc_migration(object):
                     'create',
                     [values]
                 )
-                print('Creating %s %s' % (plan['model_to'], res_id[0]))
+                #print('Creating %s %s' % (plan['model_to'], res_id[0]))
+                logging.debug('Creating %s %s' % (plan['model_to'], res_id[0]))
                 self.add_external_id(plan['model_to'], orig_id, res_id[
                                      0], plan['external_id_nomenclature'])
                 return ('create', plan['model_to'], res_id[0])
             except xmlrpclib.Fault as e:
-                print(e.faultCode)
+                #print(e.faultCode)
+                logging.debug(e.faultCode)
                 return ('create', plan['model_to'], False)
 
     def get_ids(self, model, domain):
@@ -281,7 +292,8 @@ class odoo_xmlrpc_migration(object):
     def read(self, model, ids, fields):
         server = self.socks['from']
         sock = server['sock']
-        print('Reading %s %s %s'%(server,model,ids))
+        #print('Reading %s %s %s'%(server,model,ids))
+        logging.debug('Reading %s %s %s'%(server,model,ids))
 
         return sock.execute(
             server['dbname'],
