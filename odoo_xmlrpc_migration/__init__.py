@@ -263,7 +263,7 @@ class odoo_xmlrpc_migration(object):
                     'create',
                     [values]
                 )
-                print('create %s %s' % (plan['model_to'], res_id[0]))
+                print('Creating %s %s' % (plan['model_to'], res_id[0]))
                 self.add_external_id(plan['model_to'], orig_id, res_id[
                                      0], plan['external_id_nomenclature'])
                 return ('create', plan['model_to'], res_id[0])
@@ -281,6 +281,8 @@ class odoo_xmlrpc_migration(object):
     def read(self, model, ids, fields):
         server = self.socks['from']
         sock = server['sock']
+        print('Reading %s %s %s'%(server,model,ids))
+
         return sock.execute(
             server['dbname'],
             server['uid'],
