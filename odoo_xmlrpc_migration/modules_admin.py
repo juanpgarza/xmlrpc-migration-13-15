@@ -1,6 +1,25 @@
 from . import odoo_xmlrpc_migration
 
 
+
+
+def update_module_list(self,  server='to'):
+    server = self.socks[server]
+    sock = server['sock']
+    return sock.execute(
+        server['dbname'],
+        server['uid'],
+        server['pwd'],
+        'ir.module.module',
+        'update_list'
+        )
+
+
+setattr(odoo_xmlrpc_migration, 'update_module_list', update_module_list)
+
+
+
+
 def check_module_state(self, module, server='to'):
     server = self.socks[server]
     sock = server['sock']
@@ -23,6 +42,7 @@ def install_module(self, module, server='to'):
     if len(module_state) and module_state[0]['state'] == 'uninstalled':
         server = self.socks[server]
         sock = server['sock']
+        print ('Instalar modulo %s ' % module) 
         return sock.execute(
             server['dbname'],
             server['uid'],
@@ -31,6 +51,8 @@ def install_module(self, module, server='to'):
             'button_immediate_install',
             [module_state[0]['id']],
         )
+    if len(module_state) == 0:
+        print ('El modulo %s no esta disponible' % module) 
 
 
 setattr(odoo_xmlrpc_migration, 'install_module', install_module)

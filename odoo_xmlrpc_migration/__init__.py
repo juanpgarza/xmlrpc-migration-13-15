@@ -1,12 +1,13 @@
 from configparser import ConfigParser
 from xmlrpc import client as xmlrpclib
+from ast import literal_eval
 import yaml
 import os
 
 from inspect import getouterframes, currentframe, stack
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 class odoo_xmlrpc_migration(object):
@@ -14,13 +15,17 @@ class odoo_xmlrpc_migration(object):
     modules = ['base']
     domain = []
     chunk_size = 100
+    company_id = 1
     is_test = False
+    update = True
+    create = True
     cache = {'plans': {}, 'external_ids': {}}
     max_stack = 40
     system_fields = ['id', 'write_date', 'write_uid',
                      'create_date', 'create_uid', '__last_update']
     order = 'id asc'
-
+    context = {}
+    active_list = ['|', ('active','=', True),('active','=', False)]
     def __init__(self, config_file='/etc/odoo_xmlrpc_migration.conf'):
         self.config = ConfigParser()
         self.config.read(config_file)
@@ -41,7 +46,7 @@ class odoo_xmlrpc_migration(object):
         )
         self.socks['from']['sock'] = xmlrpclib.ServerProxy(
             self.socks['from']['url'] + 'xmlrpc/object')
-
+        
         self.socks['to'] = {
             'dbname': self.config.get("odooserver_2", 'dbname'),
             'username': self.config.get("odooserver_2", 'username'),
@@ -196,22 +201,48 @@ class odoo_xmlrpc_migration(object):
     def get_context(self, **kwargs):
         return kwargs['context'] if 'context' in kwargs else {}
 
-    def migrate(self, model_name, **kwargs):
-        plan = self.load_plan(model_name)
-        res_ids = {'create': [], 'write': []}
+    def get_fields(self, plan, model_name, kwargs):
         field_names = plan['fields'].keys()
         after_save_fields = list(plan['after_save_fields'].keys()) if 'after_save_fields' in plan else []
+
+        if 'force_fields' in kwargs:
+            logging.debug("fuerzo %s de %s " % (kwargs['force_fields'], model_name))
+            field_names = kwargs['force_fields']
+
+        if 'only_fields' in kwargs:
+            self.create = False
+            logging.debug("Solo migro %s de %s " % (kwargs['only_fields'], model_name))
+            field_names = {x: plan['fields'][x] for x in kwargs['only_fields'] if x in field_names}
+
+            if after_save_fields: 
+                after_save_fields =  {x: plan['after_save_fields'][x] for x in kwargs['only_fields'] if x in after_save_fields}
+            if not field_names and after_save_fields:
+                field_names = after_save_fields
+                after_save_fields = []
+
         if 'ignore_field' in kwargs and kwargs['ignore_field'] in field_names:
             #print("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
             logging.debug("remuevo %s de %s " % (kwargs['ignore_field'], model_name))
             field_names.remove(kwargs['ignore_field'])
+        return field_names, after_save_fields
 
+    def get_row_ids(self, plan, kwargs):
         if 'row_ids' in kwargs:
             row_ids = kwargs['row_ids']
         else:
             model_domain = kwargs['domain'] if 'domain' in kwargs else []
             row_ids = self.get_ids(plan['model_from'], plan[
                                    'domain'] + model_domain + self.domain)
+        return row_ids
+
+
+
+
+    def migrate(self, model_name, **kwargs):
+        plan = self.load_plan(model_name)
+        res_ids = {'create': [], 'write': []}
+        field_names, after_save_fields = self.get_fields(plan, model_name, kwargs)
+        row_ids = self.get_row_ids(plan, kwargs)
         chunk = [row_ids[i:i + self.chunk_size]
                  for i in range(0, len(row_ids), self.chunk_size)]
         old_field_names = field_names
@@ -223,60 +254,98 @@ class odoo_xmlrpc_migration(object):
                              field_names + after_save_fields)
             for row in rows:
                 data = self.map_data(plan, row, kwargs)
-                action, model, res_id = self.save(plan, data, row['id'])
+                action, model, res_id = self.save(plan, data, row['id'], kwargs)
+
                 res_ids[action].append(res_id)
-                if len(after_save_fields):
+                if len(after_save_fields) and res_id:
                     data = self.map_data(
                         plan, row, kwargs, 'after_save_fields')
-                    self.save(plan, data, row['id'])
+                    kwargs_after = kwargs.copy()
+                    if isinstance(res_id, int):
+                        kwargs_after['res_id'] = res_id 
+                    else:
+                        kwargs_after['res_id'] = res_id[0]['res_id']
+
+                    self.save(plan, data, row['id'], kwargs_after)
 
             if self.is_test:
                 return res_ids
         return res_ids
 
-    def save(self, plan, values, orig_id):
-        external_id_method = getattr(self, plan['external_id_method'])
-        ext_id = external_id_method(
-            plan, orig_id, plan['external_id_nomenclature'])
+    def save(self, plan, values, orig_id, kwargs):
+        update = self.update
+        create = self.create
+        res_id = kwargs.get('res_id', False)
         server = self.socks['to']
         sock = server['sock']
-        #if 'customer_rank' in values and values['customer_rank']:
-        #    import pdb;pdb.set_trace()
-        if ext_id and len(ext_id):
+        if res_id:
             try:
+                sock.execute_kw(
+                        server['dbname'],
+                        server['uid'],
+                        server['pwd'],
+                        plan['model_to'],
+                        'write',
+                        [[res_id],
+                        values],
+                        {'context': self.context}
 
-                sock.execute(
+                    )
+    
+                return ('write', plan['model_to'], res_id)
+            except xmlrpclib.Fault as e:
+                logging.error(e.faultCode)
+                return ('write', plan['model_to'], False)
+        external_id_method = getattr(self, plan['external_id_method'])
+        xt_id = plan['external_id_nomenclature'] if 'external_id_nomenclature' in plan else False
+
+        if 'external_id_company_prefix' in plan:
+            xt_id = str(self.company_id) + '_' + xt_id
+        ext_id = external_id_method(
+            plan, orig_id, xt_id)
+
+        if ext_id and len(ext_id):
+            if update is False: 
+                logging.debug("Ignoro update de %s " % ext_id)
+
+                return ('write', plan['model_to'], False)
+            try:
+                sock.execute_kw(
                     server['dbname'],
                     server['uid'],
                     server['pwd'],
                     plan['model_to'],
                     'write',
-                    [ext_id[0]['res_id']],
-                    values
+                    [[ext_id[0]['res_id']],
+                     values],
+                    {'context': self.context}
+
                 )
-                #print('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
-                logging.debug('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
+                logging.info('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
                 return ('write', plan['model_to'], ext_id)
             except xmlrpclib.Fault as e:
-                #print(e.faultCode)
-                logging.debug(e.faultCode)
+                logging.error(e.faultCode)
                 return ('write', plan['model_to'], False)
 
         else:
+            if create is False:
+                logging.debug("Ignoro creacion de %s " % orig_id)
+                return ('create', plan['model_to'], False)
+
             try:
-                res_id = sock.execute(
+                res_id = sock.execute_kw(
                     server['dbname'],
                     server['uid'],
                     server['pwd'],
                     plan['model_to'],
                     'create',
-                    [values]
+                    [values],
+                    {'context': self.context}
                 )
-                #print('Creating %s %s' % (plan['model_to'], res_id[0]))
-                logging.debug('Creating %s %s' % (plan['model_to'], res_id[0]))
-                self.add_external_id(plan['model_to'], orig_id, res_id[
-                                     0], plan['external_id_nomenclature'])
-                return ('create', plan['model_to'], res_id[0])
+                logging.info('Creating %s %s' % (plan['model_to'], res_id))
+                if plan['external_id_method'] == 'row_get_id':
+                    self.add_external_id(plan['model_to'], orig_id, res_id, plan['external_id_nomenclature'])
+                return ('create', plan['model_to'], res_id)
             except xmlrpclib.Fault as e:
                 #print(e.faultCode)
                 logging.debug(e.faultCode)
@@ -289,11 +358,28 @@ class odoo_xmlrpc_migration(object):
                             domain, 0, False, self.order
                             )
 
-    def read(self, model, ids, fields):
-        server = self.socks['from']
+    def search_read(self, model, leaf, fields, dir='from'):
+        server = self.socks[dir]
         sock = server['sock']
         #print('Reading %s %s %s'%(server,model,ids))
-        logging.debug('Reading %s %s %s'%(server,model,ids))
+        #logging.debug('Reading  %s %s'%(model,ids))
+
+        return sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            model,
+            'search_read',
+            leaf,
+            fields
+        )
+
+
+    def read(self, model, ids, fields, dir='from'):
+        server = self.socks[dir]
+        sock = server['sock']
+        #print('Reading %s %s %s'%(server,model,ids))
+        #logging.debug('Reading  %s %s'%(model,ids))
 
         return sock.execute(
             server['dbname'],
@@ -323,13 +409,38 @@ class odoo_xmlrpc_migration(object):
                 maping[f['to']['name']] = val if val is not None else default_value
         return maping
 
+    def map_fix_value(self, value, field, plan, row, field_collection='fields'):
+        field_data = plan[field_collection][field]
+        return field_data['to']['value']
+
+    def fix_value_map(self, value, field, plan, row, field_collection='fields'):
+        field_data = plan[field_collection][field]
+
+        if field_data['to']['type'] == 'date':
+            return field_data['to']['value'].strftime("%Y-%m-%d")
+        elif field_data['to']['type'] == 'datetime':
+            return field_data['to']['value'].strftime("%Y-%m-%d %H:%M:%S")
+        elif field_data['to']['type'] in ['decimal', 'float']:
+            return float(field_data['to']['value'])
+        elif field_data['to']['type'] in ['boolean']:
+            return bool(field_data['to']['value'])
+        elif field_data['to']['type'] in ['selection',
+                                          'char', 'float', 'integer',
+                                          'text', 'html', 'boolean']:
+            return str(field_data['to']['value'])
+        elif field_data['to']['type'] in ['many2many', 'one2many']:
+            return literal_eval(field_data['to']['value'])
+
+
     def magic_map(self, value, field, plan, row, field_collection='fields'):
         field_data = plan[field_collection][field]
-        if field_data['from']['type'] in ['selection', 'date', 'datetime',
-                                          'char', 'float', 'integer',
+        if field_data['to']['type'] in ['selection', 'date', 'datetime',
+                                          'char', 'float',
                                           'text', 'html', 'boolean']:
             # to-do : Cast Value type
             return value
+        elif field_data['to']['type'] == 'integer':
+            return int(value)
         elif field_data['from']['type'] == 'one2many':
             subplan = self.load_plan(field_data['from']['relation'])
             if not subplan:
@@ -354,7 +465,7 @@ class odoo_xmlrpc_migration(object):
                     if len(new['create']):
                         res_ids.append(new['create'][0])
                     else:
-                        res_ids = []
+                        return None
             return [(6, 0, res_ids)]
 
         elif field_data['from']['type'] in ['many2one'] and value:
@@ -395,14 +506,57 @@ class odoo_xmlrpc_migration(object):
                         row_ids=[res_id]
                     )
                     res_ids.append(new['create'][0])
+            if not len(res_ids):
+                return None
             return [(6, 0, res_ids)]
 
         return None
 
+    def other_row_get_first_id(self, plan, value, row, cache=False):
+        raise('ooo')
+        server = self.socks['to']
+        sock = server['sock']
+        company_prefix = ''
+        if 'external_id_company_prefix' in plan:
+            company_prefix = str(self.company_id) + '_'
+        row_value = row[plan['match_field']][0] 
+        nomeclature = company_prefix + plan['external_id_nomenclature']
+        args = [('name', '=', nomeclature % row_value),
+                ('module', '=', 'xmlrpc_migration'),
+                ('model', '=', plan['model_to'])]
+
+        res = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.data',
+            'search_read',
+            args,
+            ['res_id']
+        )
+
+        if len(res):
+            record = sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                plan['model_to'],
+                'search',
+                [(plan['match_field'],'=',res[0]['res_id'])],
+
+            )
+            if len(record):
+                return [{'res_id':record[0]}]
+
+        return False
+
     def row_get_id(self, plan, value, row, cache=False):
         server = self.socks['to']
         sock = server['sock']
-        nomeclature = plan['external_id_nomenclature']
+        company_prefix = ''
+        if 'external_id_company_prefix' in plan:
+            company_prefix = str(self.company_id) + '_'
+        nomeclature = company_prefix + plan['external_id_nomenclature']
         args = [('name', '=', nomeclature % value),
                 ('module', '=', 'xmlrpc_migration'),
                 ('model', '=', plan['model_to'])]
@@ -444,6 +598,29 @@ class odoo_xmlrpc_migration(object):
             'create',
             vals
         )
+
+    def same_name(self, plan, res_id, row, cache=False):
+        server = self.socks['from']
+        sock = server['sock']
+        external_id = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.data',
+            'search',
+            [('name', '=', row['name'])]
+        )
+        if len(external_id):
+            return [{'res_id':external_id[0]}]
+            if cache:
+                if plan['model_from'] not in self.cache['external_ids']:
+                    self.cache['external_ids'][plan['model_from']] = {}
+                self.cache['external_ids'][plan['model_from']][
+                    res_id] = external_id[0]
+            return res
+
+        return None
+
 
     def same_external_id(self, plan, res_id, row, cache=False):
         server = self.socks['from']
@@ -512,6 +689,8 @@ class odoo_xmlrpc_migration(object):
                      0][plan['external_id_field_from']])]
             if 'active' in plan['fields'].keys():
                 leaf += ['|', ('active', '=', False), ('active', '=', True)]
+            if 'external_id_domain_to' in plan:
+                leaf += plan['external_id_domain_to']
             external_id = sock.execute(
                 server['dbname'],
                 server['uid'],
@@ -542,3 +721,248 @@ class odoo_xmlrpc_migration(object):
             res_ids,
             fields
         )
+
+    def execute_method_chunked(self, model, method, ids, server='from'):
+        server = self.socks[server]
+        sock = server['sock']
+        chunks = [ids[i:i + self.chunk_size - 1]
+                  for i in range(0, len(ids), self.chunk_size)]
+        for chunk in chunks:
+            print ("execute %s: %s of %s" % (method, len(chunk), len(chunks)))
+            sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                model,
+                method,
+                chunk
+            )
+        return True
+
+    def search(self, model, leaf,  server='from'):
+        server = self.socks[server]
+        sock = server['sock']
+        return sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            model,
+            'search',
+            leaf
+        )
+
+    def get_parameter(self, key, default_value):
+        server = self.socks['to']
+        sock = server['sock']
+        exist = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.config_parameter',
+            'search',
+            [('key', '=', key)],
+        )
+        if len(exist):
+            exist = sock.execute(
+                        server['dbname'],
+                        server['uid'],
+                        server['pwd'],
+                        'ir.config_parameter',
+                        'read',
+                        exist,
+                        ['value']
+                    )
+            return exist[0]['value']
+        return default_value
+
+    def set_parameter(self, key, value):
+        server = self.socks['to']
+        sock = server['sock']
+        exist = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.config_parameter',
+            'search',
+            [('key', '=', key)]
+        )
+        if len(exist):
+            return sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                'ir.config_parameter',
+                'write',
+                exist,
+                {'value': str(value)}
+            )
+        return sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.config_parameter',
+            'create',
+            [{
+                'key': key,
+                'value': str(value)
+            }]
+        )
+
+    def same_name_many2one(self, value, field, plan, row, field_collection='fields'):
+        field_data = plan[field_collection][field]
+
+        server = self.socks['to']
+        sock = server['sock']
+        ext_id = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            field_data['to']['relation'],
+            'search',
+            [('name', '=', value[1])],
+        )
+        if len(ext_id):
+            return ext_id[0]
+        else:
+            if len(stack(0)) > 20:
+                return None
+
+            new = self.migrate(
+                field_data['from']['relation'],
+                row_ids=[value[0]]
+            )
+            if len(new['create']):
+                return new['create'][0]
+            else:
+                return None
+
+    def same_value(self, value, field, plan, row, field_collection='fields'):
+        field_data = plan[field_collection][field]
+
+        server = self.socks['to']
+        sock = server['sock']
+
+        ext_id = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            field_data['to']['relation'],
+            'search',
+            [('name', '=', value[1])],
+        )
+        if len(ext_id):
+            return ext_id[0]
+        else:
+            if len(stack(0)) > 20:
+                return None
+
+            new = self.migrate(
+                field_data['from']['relation'],
+                row_ids=[value[0]]
+            )
+            if len(new['create']):
+                return new['create'][0]
+            else:
+                return None
+
+    def get_result_ids(self, result_set):
+        new = [x for x in result_set['create']]
+        updated = [x[0]['res_id'] for x in result_set['write']]
+        return new + updated
+
+
+    def name_field_def(self):
+        return {'name':{'from':{'name': 'name','type': 'char'},'to':{'name': 'name','type': 'char'}}}
+
+
+    def env_company_id(self, value, field, plot, row, field_collection='fields'):
+        return self.company_id
+
+    def get_cache(self, model_from, org_id):
+        if model_from not in self.cache['external_ids']:
+            self.cache['external_ids'][model_from] = {}
+            if org_id in self.cache['external_ids'][model_from]:
+                return self.cache['external_ids'][model_from]['org_id']
+
+    def set_cache(self, model_from, org_id, dest_id):
+        if model_from not in self.cache['external_ids']:
+            self.cache['external_ids'][model_from] = {}
+        self.cache['external_ids'][model_from][org_id] = dest_id
+
+    def migrate_inverse(self, model_name, **kwargs):
+        server = self.socks['to']
+        sock = server['sock']
+
+        plan = self.load_plan(model_name)
+
+        ids = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            plan['model_to'],
+            'search',
+            kwargs['domain']
+        )
+        if len(ids):
+            args = [('res_id', 'in', ids),
+                    ('module', '=', 'xmlrpc_migration'),
+                    ('model', '=', plan['model_to'])]
+
+            res = sock.execute(
+                server['dbname'],
+                server['uid'],
+                server['pwd'],
+                'ir.model.data',
+                'search_read',
+                args,
+                ['name']
+            )
+
+            map_ids = [int(x['name'].split('_')[-1]) for x in res]
+            if map_ids:
+                self.migrate(model_name,row_ids=map_ids)
+
+    def detect_new(self, model_name, **kwargs):
+        plan = self.load_plan(model_name)
+        row_ids = self.get_row_ids(plan, kwargs)
+        chunks = [row_ids[i:i + self.chunk_size]
+                 for i in range(0, len(row_ids), self.chunk_size)]
+
+        external_id_method = getattr(self, plan['external_id_method'] + '_multiple')
+        xt_id = plan['external_id_nomenclature'] if 'external_id_nomenclature' in plan else False
+        if 'external_id_company_prefix' in plan:
+            xt_id = str(self.company_id) + '_' + xt_id
+
+        for chunk in chunks:
+            res_ids = external_id_method(plan, chunk, xt_id)
+            print ("Migrando %s %s" % (len(res_ids),model_name,)) 
+            new = self.migrate(
+                model_name,
+                row_ids=res_ids,
+            )
+
+    def row_get_id_multiple(self, plan, ids, nomeclature):
+        server = self.socks['to']
+        sock = server['sock']
+        names = {nomeclature % value : value for value in ids }
+
+
+        args = [('name', 'in', list(names.keys())),
+                ('module', '=', 'xmlrpc_migration'),
+                ('model', '=', plan['model_to'])]
+
+        res = sock.execute(
+            server['dbname'],
+            server['uid'],
+            server['pwd'],
+            'ir.model.data',
+            'search_read',
+            args,
+            ['name']
+        )
+        map_names = [x['name'] for x in res]
+        ret = []
+        for name in names :
+            if name not in map_names:
+                ret.append(names[name])
+        return ret
