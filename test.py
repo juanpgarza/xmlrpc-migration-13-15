@@ -7,12 +7,22 @@ plan = odoo_xmlrpc_migration()
 #plan.migrate('res.users', domain=[('active', '=', True), ('share', '=', False)])
 plan.is_test = True
 
-plan.install_module('base_address_city')
-plan.install_module('sale')
-plan.install_module('l10n_ar')
+# plan.save_plan('res.partner')
+# plan.migrate('res.partner')
+
+# plan.save_plan('res.country')
+# plan.save_plan('res.country.state')
+# plan.save_plan('res.bank')
+plan.migrate('res.country')
+plan.migrate('res.country.state')
+plan.migrate('res.bank')
+
+# plan.install_module('base_address_city')
+# plan.install_module('sale')
+# plan.install_module('l10n_ar')
 
 
-plan.migrate('sale.order')
+# plan.migrate('sale.order')
 
 """plan.install_module('crm')
 plan.install_module('stock')

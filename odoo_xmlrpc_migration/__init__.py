@@ -26,7 +26,7 @@ class odoo_xmlrpc_migration(object):
     order = 'id asc'
     context = {}
     active_list = ['|', ('active','=', True),('active','=', False)]
-    def __init__(self, config_file='/etc/odoo_xmlrpc_migration.conf'):
+    def __init__(self, config_file='/home/juan/filo-migration/xmlrpc_migration/test.conf'):
         self.config = ConfigParser()
         self.config.read(config_file)
         self.data_dir = self.config.get("yalm", 'path')
@@ -473,6 +473,7 @@ class odoo_xmlrpc_migration(object):
             if len(subplan) == 0:
                 return None
             external_id_method = getattr(self, subplan['external_id_method'])
+            # import pdb; pdb.set_trace()
             ext_id = external_id_method(
                 subplan, value[0], row, field_data.get('cache', False))
             if ext_id and len(ext_id):

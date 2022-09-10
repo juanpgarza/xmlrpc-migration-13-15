@@ -1,0 +1,103 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_bank_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  bic:
+    from:
+      name: bic
+      type: char
+    map_method: magic_map
+    to:
+      name: bic
+      type: char
+  city:
+    from:
+      name: city
+      type: char
+    map_method: magic_map
+    to:
+      name: city
+      type: char
+  country:
+    from:
+      name: country
+      relation: res.country
+      type: many2one
+    map_method: magic_map
+    to:
+      name: country
+      relation: res.country
+      type: many2one
+  email:
+    from:
+      name: email
+      type: char
+    map_method: magic_map
+    to:
+      name: email
+      type: char
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  phone:
+    from:
+      name: phone
+      type: char
+    map_method: magic_map
+    to:
+      name: phone
+      type: char
+  state:
+    from:
+      name: state
+      relation: res.country.state
+      type: many2one
+    map_method: magic_map
+    to:
+      name: state
+      relation: res.country.state
+      type: many2one
+  street:
+    from:
+      name: street
+      type: char
+    map_method: magic_map
+    to:
+      name: street
+      type: char
+  street2:
+    from:
+      name: street2
+      type: char
+    map_method: magic_map
+    to:
+      name: street2
+      type: char
+  zip:
+    from:
+      name: zip
+      type: char
+    map_method: magic_map
+    to:
+      name: zip
+      type: char
+model_from: res.bank
+model_to: res.bank
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char
