@@ -1,0 +1,444 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: sale_order_%s
+fields:
+  # access_token:
+  #   from:
+  #     name: access_token
+  #     type: char
+  #   map_method: magic_map
+  #   to:
+  #     name: access_token
+  #     type: char
+  # activity_ids:
+  #   from:
+  #     name: activity_ids
+  #     relation: mail.activity
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_ids
+  #     relation: mail.activity
+  #     relation_field: res_id
+  #     type: one2many
+  # activity_summary:
+  #   from:
+  #     name: activity_summary
+  #     type: char
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_summary
+  #     type: char
+  # activity_type_id:
+  #   from:
+  #     name: activity_type_id
+  #     relation: mail.activity.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_type_id
+  #     relation: mail.activity.type
+  #     type: many2one
+  # activity_user_id:
+  #   from:
+  #     name: activity_user_id
+  #     relation: res.users
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_user_id
+  #     relation: res.users
+  #     type: many2one
+  # campaign_id:
+  #   from:
+  #     name: campaign_id
+  #     relation: utm.campaign
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: campaign_id
+  #     relation: utm.campaign
+  #     type: many2one
+  client_order_ref:
+    from:
+      name: client_order_ref
+      type: char
+    map_method: magic_map
+    to:
+      name: client_order_ref
+      type: char
+  commitment_date:
+    from:
+      name: commitment_date
+      type: datetime
+    map_method: magic_map
+    to:
+      name: commitment_date
+      type: datetime
+  # company_id:
+  #   from:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  # fiscal_position_id:
+  #   from:
+  #     name: fiscal_position_id
+  #     relation: account.fiscal.position
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: fiscal_position_id
+  #     relation: account.fiscal.position
+  #     type: many2one
+  # medium_id:
+  #   from:
+  #     name: medium_id
+  #     relation: utm.medium
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: medium_id
+  #     relation: utm.medium
+  #     type: many2one
+  # message_follower_ids:
+  #   from:
+  #     name: message_follower_ids
+  #     relation: mail.followers
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: message_follower_ids
+  #     relation: mail.followers
+  #     relation_field: res_id
+  #     type: one2many
+  # message_ids:
+  #   from:
+  #     name: message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+  # message_main_attachment_id:
+  #   from:
+  #     name: message_main_attachment_id
+  #     relation: ir.attachment
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: message_main_attachment_id
+  #     relation: ir.attachment
+  #     type: many2one
+  note:
+    from:
+      name: note
+      type: text
+    map_method: magic_map
+    to:
+      name: note
+      type: html
+  # order_line:
+  #   from:
+  #     name: order_line
+  #     relation: sale.order.line
+  #     relation_field: order_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: order_line
+  #     relation: sale.order.line
+  #     relation_field: order_id
+  #     type: one2many
+  origin:
+    from:
+      name: origin
+      type: char
+    map_method: magic_map
+    to:
+      name: origin
+      type: char
+  # payment_term_id:
+  #   from:
+  #     name: payment_term_id
+  #     relation: account.payment.term
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: payment_term_id
+  #     relation: account.payment.term
+  #     type: many2one
+  reference:
+    from:
+      name: reference
+      type: char
+    map_method: magic_map
+    to:
+      name: reference
+      type: char
+  signature:
+    from:
+      name: signature
+      type: binary
+    map_method: magic_map
+    to:
+      name: signature
+      type: binary
+  signed_by:
+    from:
+      name: signed_by
+      type: char
+    map_method: magic_map
+    to:
+      name: signed_by
+      type: char
+  signed_on:
+    from:
+      name: signed_on
+      type: datetime
+    map_method: magic_map
+    to:
+      name: signed_on
+      type: datetime
+  # source_id:
+  #   from:
+  #     name: source_id
+  #     relation: utm.source
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: source_id
+  #     relation: utm.source
+  #     type: many2one
+  # team_id:
+  #   from:
+  #     name: team_id
+  #     relation: crm.team
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: team_id
+  #     relation: crm.team
+  #     type: many2one
+  user_id:
+    from:
+      name: user_id
+      relation: res.users
+      type: many2one
+    map_method: magic_map
+    to:
+      name: user_id
+      relation: res.users
+      type: many2one
+  # website_message_ids:
+  #   from:
+  #     name: website_message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: website_message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+model_from: sale.order
+model_to: sale.order
+no_match_fields:
+  access_url:
+    from:
+      name: access_url
+      type: char
+  access_warning:
+    from:
+      name: access_warning
+      type: text
+  activity_date_deadline:
+    from:
+      name: activity_date_deadline
+      type: date
+  activity_exception_decoration:
+    from:
+      name: activity_exception_decoration
+      type: selection
+  activity_exception_icon:
+    from:
+      name: activity_exception_icon
+      type: char
+  activity_state:
+    from:
+      name: activity_state
+      type: selection
+  amount_by_group:
+    from:
+      name: amount_by_group
+      type: binary
+  amount_tax:
+    from:
+      name: amount_tax
+      type: monetary
+  amount_total:
+    from:
+      name: amount_total
+      type: monetary
+  amount_undiscounted:
+    from:
+      name: amount_undiscounted
+      type: float
+  amount_untaxed:
+    from:
+      name: amount_untaxed
+      type: monetary
+  analytic_account_id:
+    from:
+      name: analytic_account_id
+      relation: account.analytic.account
+      type: many2one
+  authorized_transaction_ids:
+    from:
+      name: authorized_transaction_ids
+      relation: payment.transaction
+      type: many2many
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  currency_rate:
+    from:
+      name: currency_rate
+      type: float
+  date_order:
+    from:
+      name: date_order
+      type: datetime
+  display_name:
+    from:
+      name: display_name
+      type: char
+  invoice_count:
+    from:
+      name: invoice_count
+      type: integer
+  invoice_ids:
+    from:
+      name: invoice_ids
+      relation: account.move
+      type: many2many
+  invoice_status:
+    from:
+      name: invoice_status
+      type: selection
+  is_expired:
+    from:
+      name: is_expired
+      type: boolean
+  message_attachment_count:
+    from:
+      name: message_attachment_count
+      type: integer
+  message_channel_ids:
+    from:
+      name: message_channel_ids
+      relation: mail.channel
+      type: many2many
+  message_has_error:
+    from:
+      name: message_has_error
+      type: boolean
+  message_has_error_counter:
+    from:
+      name: message_has_error_counter
+      type: integer
+  message_has_sms_error:
+    from:
+      name: message_has_sms_error
+      type: boolean
+  message_is_follower:
+    from:
+      name: message_is_follower
+      type: boolean
+  message_needaction:
+    from:
+      name: message_needaction
+      type: boolean
+  message_needaction_counter:
+    from:
+      name: message_needaction_counter
+      type: integer
+  message_partner_ids:
+    from:
+      name: message_partner_ids
+      relation: res.partner
+      type: many2many
+  message_unread:
+    from:
+      name: message_unread
+      type: boolean
+  message_unread_counter:
+    from:
+      name: message_unread_counter
+      type: integer
+  name:
+    from:
+      name: name
+      type: char
+  partner_id:
+    from:
+      name: partner_id
+      relation: res.partner
+      type: many2one
+  partner_invoice_id:
+    from:
+      name: partner_invoice_id
+      relation: res.partner
+      type: many2one
+  partner_shipping_id:
+    from:
+      name: partner_shipping_id
+      relation: res.partner
+      type: many2one
+  pricelist_id:
+    from:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+  remaining_validity_days:
+    from:
+      name: remaining_validity_days
+      type: integer
+  require_payment:
+    from:
+      name: require_payment
+      type: boolean
+  require_signature:
+    from:
+      name: require_signature
+      type: boolean
+  state:
+    from:
+      name: state
+      type: selection
+  transaction_ids:
+    from:
+      name: transaction_ids
+      relation: payment.transaction
+      type: many2many
+  type_name:
+    from:
+      name: type_name
+      type: char
+  validity_date:
+    from:
+      name: validity_date
+      type: date

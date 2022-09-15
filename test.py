@@ -11,7 +11,7 @@ plan = odoo_xmlrpc_migration()
 #plan.migrate('res.users', domain=[('active', '=', True), ('share', '=', False)])
 plan.is_test = True
 
-plan.save_plan('product.pricelist.item')
+plan.save_plan('sale.order.line')
 
 # product.category
 
