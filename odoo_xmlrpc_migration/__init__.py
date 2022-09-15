@@ -175,13 +175,15 @@ class odoo_xmlrpc_migration(object):
                 yaml.dump(data, file)
 
     def load_plan(self, model_from):
+        # import pdb; pdb.set_trace()
         model_name = model_from.replace('.', '_')
         if model_name in self.cache['plans']:
             return self.cache['plans'][model_name]
         result = {}
-
+        # import pdb; pdb.set_trace()
         for module in self.modules:
             try:
+                # import pdb; pdb.set_trace()
                 with open('%s/%s/%s.yaml' % (self.data_dir, module, model_name)) as file:
                     # data = yaml.full_load(file)
                     data = yaml.load(file, Loader=yaml.FullLoader)
@@ -190,11 +192,14 @@ class odoo_xmlrpc_migration(object):
                     else:
                         result['fields'].update(data['fields'])
                         result['domain'] += data['domain']
+                    # import pdb; pdb.set_trace()
             except IOError:
                 pass
+                # import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         if len(result) == 0:
-            #print("Not exists plan for %s" % model_from)
-            logging.debug("Not exists plan for %s" % model_from)
+            print("Not exists plan for %s" % model_from)
+            # logging.debug("Not exists plan for %s" % model_from)
         self.cache['plans'][model_name] = result
         return result
 
@@ -241,6 +246,7 @@ class odoo_xmlrpc_migration(object):
     def migrate(self, model_name, **kwargs):
         plan = self.load_plan(model_name)
         res_ids = {'create': [], 'write': []}
+        # import pdb; pdb.set_trace()
         field_names, after_save_fields = self.get_fields(plan, model_name, kwargs)
         row_ids = self.get_row_ids(plan, kwargs)
         chunk = [row_ids[i:i + self.chunk_size]

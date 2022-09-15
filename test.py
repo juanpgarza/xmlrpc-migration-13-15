@@ -2,6 +2,7 @@
 from odoo_xmlrpc_migration import odoo_xmlrpc_migration, mig_8_to_13, log_hash, modules_admin
 import l10n_ar_methods
 
+# ./odoo-bin -c .odoorc -d destino-z -i contacts,sale_management --load-language es_AR --without-demo=all
 
 plan = odoo_xmlrpc_migration()
 #plan.migrate('res.users', domain=[('active', '=', True), ('share', '=', False)])
