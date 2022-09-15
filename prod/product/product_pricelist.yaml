@@ -1,0 +1,85 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_pricelist_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  # company_id:
+  #   from:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  # country_group_ids:
+  #   from:
+  #     name: country_group_ids
+  #     relation: res.country.group
+  #     type: many2many
+  #   map_method: magic_map
+  #   to:
+  #     name: country_group_ids
+  #     relation: res.country.group
+  #     type: many2many
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+    map_method: magic_map
+    to:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  discount_policy:
+    from:
+      name: discount_policy
+      type: selection
+    map_method: magic_map
+    to:
+      name: discount_policy
+      type: selection
+  item_ids:
+    from:
+      name: item_ids
+      relation: product.pricelist.item
+      relation_field: pricelist_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: item_ids
+      relation: product.pricelist.item
+      relation_field: pricelist_id
+      type: one2many
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer
+model_from: product.pricelist
+model_to: product.pricelist
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char

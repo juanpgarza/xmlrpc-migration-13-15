@@ -1,0 +1,219 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: res_partner_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  child_ids:
+    from:
+      name: child_ids
+      relation: res.partner
+      relation_field: parent_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: child_ids
+      relation: res.partner
+      relation_field: parent_id
+      type: one2many
+  city:
+    from:
+      name: city
+      type: char
+    map_method: magic_map
+    to:
+      name: city
+      type: char
+  comment:
+    from:
+      name: comment
+      type: text
+    map_method: magic_map
+    to:
+      name: comment
+      type: html      
+  company_type:
+    from:
+      name: company_type
+      type: selection
+    map_method: magic_map
+    to:
+      name: company_type
+      type: selection
+  country_id:
+    from:
+      name: country_id
+      relation: res.country
+      type: many2one
+    map_method: magic_map
+    to:
+      name: country_id
+      relation: res.country
+      type: many2one
+  email:
+    from:
+      name: email
+      type: char
+    map_method: magic_map
+    to:
+      name: email
+      type: char
+  lang:
+    from:
+      name: lang
+      type: selection
+    map_method: magic_map
+    to:
+      name: lang
+      type: selection
+  mobile:
+    from:
+      name: mobile
+      type: char
+    map_method: magic_map
+    to:
+      name: mobile
+      type: char
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  phone:
+    from:
+      name: phone
+      type: char
+    map_method: magic_map
+    to:
+      name: phone
+      type: char
+  ref:
+    from:
+      name: ref
+      type: char
+    map_method: magic_map
+    to:
+      name: ref
+      type: char
+  state_id:
+    from:
+      name: state_id
+      relation: res.country.state
+      type: many2one
+    map_method: magic_map
+    to:
+      name: state_id
+      relation: res.country.state
+      type: many2one
+  street:
+    from:
+      name: street
+      type: char
+    map_method: magic_map
+    to:
+      name: street
+      type: char
+  street2:
+    from:
+      name: street2
+      type: char
+    map_method: magic_map
+    to:
+      name: street2
+      type: char
+  # user_id:
+  #   from:
+  #     name: user_id
+  #     relation: res.users
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: user_id
+  #     relation: res.users
+  #     type: many2one
+  website:
+    from:
+      name: website
+      type: char
+    map_method: magic_map
+    to:
+      name: website
+      type: char
+  zip:
+    from:
+      name: zip
+      type: char
+    map_method: magic_map
+    to:
+      name: zip
+      type: char
+model_from: res.partner
+model_to: res.partner
+no_match_fields:
+  commercial_company_name:
+    from:
+      name: commercial_company_name
+      type: char
+  commercial_partner_id:
+    from:
+      name: commercial_partner_id
+      relation: res.partner
+      type: many2one
+  contact_address:
+    from:
+      name: contact_address
+      type: char
+  customer:
+    from:
+      name: customer
+      type: boolean
+  display_name:
+    from:
+      name: display_name
+      type: char
+  email_formatted:
+    from:
+      name: email_formatted
+      type: char
+  image:
+    from:
+      name: image
+      type: binary
+  image_medium:
+    from:
+      name: image_medium
+      type: binary
+  image_small:
+    from:
+      name: image_small
+      type: binary
+  parent_name:
+    from:
+      name: parent_name
+      type: char
+  partner_share:
+    from:
+      name: partner_share
+      type: boolean
+  self:
+    from:
+      name: self
+      relation: res.partner
+      type: many2one
+  supplier:
+    from:
+      name: supplier
+      type: boolean
+  tz_offset:
+    from:
+      name: tz_offset
+      type: char

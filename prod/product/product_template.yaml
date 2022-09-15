@@ -1,0 +1,455 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_template_%s
+fields:
+  activity_ids:
+    from:
+      name: activity_ids
+      relation: mail.activity
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: activity_ids
+      relation: mail.activity
+      relation_field: res_id
+      type: one2many
+  activity_summary:
+    from:
+      name: activity_summary
+      type: char
+    map_method: magic_map
+    to:
+      name: activity_summary
+      type: char
+  activity_type_id:
+    from:
+      name: activity_type_id
+      relation: mail.activity.type
+      type: many2one
+    map_method: magic_map
+    to:
+      name: activity_type_id
+      relation: mail.activity.type
+      type: many2one
+  activity_user_id:
+    from:
+      name: activity_user_id
+      relation: res.users
+      type: many2one
+    map_method: magic_map
+    to:
+      name: activity_user_id
+      relation: res.users
+      type: many2one
+  attribute_line_ids:
+    from:
+      name: attribute_line_ids
+      relation: product.template.attribute.line
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: attribute_line_ids
+      relation: product.template.attribute.line
+      relation_field: product_tmpl_id
+      type: one2many
+  barcode:
+    from:
+      name: barcode
+      type: char
+    map_method: magic_map
+    to:
+      name: barcode
+      type: char
+  categ_id:
+    from:
+      name: categ_id
+      relation: product.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: categ_id
+      relation: product.category
+      type: many2one
+  color:
+    from:
+      name: color
+      type: integer
+    map_method: magic_map
+    to:
+      name: color
+      type: integer
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+    map_method: magic_map
+    to:
+      name: company_id
+      relation: res.company
+      type: many2one
+  default_code:
+    from:
+      name: default_code
+      type: char
+    map_method: magic_map
+    to:
+      name: default_code
+      type: char
+  description:
+    from:
+      name: description
+      type: text
+    map_method: magic_map
+    to:
+      name: description
+      type: html
+  description_purchase:
+    from:
+      name: description_purchase
+      type: text
+    map_method: magic_map
+    to:
+      name: description_purchase
+      type: text
+  description_sale:
+    from:
+      name: description_sale
+      type: text
+    map_method: magic_map
+    to:
+      name: description_sale
+      type: text
+  image_1920:
+    from:
+      name: image_1920
+      type: binary
+    map_method: magic_map
+    to:
+      name: image_1920
+      type: binary
+  list_price:
+    from:
+      name: list_price
+      type: float
+    map_method: magic_map
+    to:
+      name: list_price
+      type: float
+  message_follower_ids:
+    from:
+      name: message_follower_ids
+      relation: mail.followers
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: message_follower_ids
+      relation: mail.followers
+      relation_field: res_id
+      type: one2many
+  message_ids:
+    from:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: message_ids
+      relation: mail.message
+      relation_field: res_id
+      type: one2many
+  message_main_attachment_id:
+    from:
+      name: message_main_attachment_id
+      relation: ir.attachment
+      type: many2one
+    map_method: magic_map
+    to:
+      name: message_main_attachment_id
+      relation: ir.attachment
+      type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  packaging_ids:
+    from:
+      name: packaging_ids
+      relation: product.packaging
+      type: one2many
+    map_method: magic_map
+    to:
+      name: packaging_ids
+      relation: product.packaging
+      type: one2many
+  price:
+    from:
+      name: price
+      type: float
+    map_method: magic_map
+    to:
+      name: price
+      type: float
+  pricelist_id:
+    from:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+    map_method: magic_map
+    to:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+  product_variant_ids:
+    from:
+      name: product_variant_ids
+      relation: product.product
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: product_variant_ids
+      relation: product.product
+      relation_field: product_tmpl_id
+      type: one2many
+  purchase_ok:
+    from:
+      name: purchase_ok
+      type: boolean
+    map_method: magic_map
+    to:
+      name: purchase_ok
+      type: boolean
+  sale_ok:
+    from:
+      name: sale_ok
+      type: boolean
+    map_method: magic_map
+    to:
+      name: sale_ok
+      type: boolean
+  seller_ids:
+    from:
+      name: seller_ids
+      relation: product.supplierinfo
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: seller_ids
+      relation: product.supplierinfo
+      relation_field: product_tmpl_id
+      type: one2many
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer
+  standard_price:
+    from:
+      name: standard_price
+      type: float
+    map_method: magic_map
+    to:
+      name: standard_price
+      type: float
+  uom_id:
+    from:
+      name: uom_id
+      relation: uom.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_id
+      relation: uom.uom
+      type: many2one
+  uom_po_id:
+    from:
+      name: uom_po_id
+      relation: uom.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: uom_po_id
+      relation: uom.uom
+      type: many2one
+  variant_seller_ids:
+    from:
+      name: variant_seller_ids
+      relation: product.supplierinfo
+      relation_field: product_tmpl_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: variant_seller_ids
+      relation: product.supplierinfo
+      relation_field: product_tmpl_id
+      type: one2many
+  volume:
+    from:
+      name: volume
+      type: float
+    map_method: magic_map
+    to:
+      name: volume
+      type: float
+  weight:
+    from:
+      name: weight
+      type: float
+    map_method: magic_map
+    to:
+      name: weight
+      type: float
+model_from: product.template
+model_to: product.template
+no_match_fields:
+  activity_date_deadline:
+    from:
+      name: activity_date_deadline
+      type: date
+  activity_exception_decoration:
+    from:
+      name: activity_exception_decoration
+      type: selection
+  activity_exception_icon:
+    from:
+      name: activity_exception_icon
+      type: char
+  activity_state:
+    from:
+      name: activity_state
+      type: selection
+  can_image_1024_be_zoomed:
+    from:
+      name: can_image_1024_be_zoomed
+      type: boolean
+  cost_currency_id:
+    from:
+      name: cost_currency_id
+      relation: res.currency
+      type: many2one
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  display_name:
+    from:
+      name: display_name
+      type: char
+  has_configurable_attributes:
+    from:
+      name: has_configurable_attributes
+      type: boolean
+  image_1024:
+    from:
+      name: image_1024
+      type: binary
+  image_128:
+    from:
+      name: image_128
+      type: binary
+  image_256:
+    from:
+      name: image_256
+      type: binary
+  image_512:
+    from:
+      name: image_512
+      type: binary
+  is_product_variant:
+    from:
+      name: is_product_variant
+      type: boolean
+  lst_price:
+    from:
+      name: lst_price
+      type: float
+  message_attachment_count:
+    from:
+      name: message_attachment_count
+      type: integer
+  message_channel_ids:
+    from:
+      name: message_channel_ids
+      relation: mail.channel
+      type: many2many
+  message_has_error:
+    from:
+      name: message_has_error
+      type: boolean
+  message_has_error_counter:
+    from:
+      name: message_has_error_counter
+      type: integer
+  message_is_follower:
+    from:
+      name: message_is_follower
+      type: boolean
+  message_needaction:
+    from:
+      name: message_needaction
+      type: boolean
+  message_needaction_counter:
+    from:
+      name: message_needaction_counter
+      type: integer
+  message_partner_ids:
+    from:
+      name: message_partner_ids
+      relation: res.partner
+      type: many2many
+  message_unread:
+    from:
+      name: message_unread
+      type: boolean
+  message_unread_counter:
+    from:
+      name: message_unread_counter
+      type: integer
+  pricelist_item_count:
+    from:
+      name: pricelist_item_count
+      type: integer
+  product_variant_count:
+    from:
+      name: product_variant_count
+      type: integer
+  product_variant_id:
+    from:
+      name: product_variant_id
+      relation: product.product
+      type: many2one
+  rental:
+    from:
+      name: rental
+      type: boolean
+  uom_name:
+    from:
+      name: uom_name
+      type: char
+  valid_product_template_attribute_line_ids:
+    from:
+      name: valid_product_template_attribute_line_ids
+      relation: product.template.attribute.line
+      type: many2many
+  volume_uom_name:
+    from:
+      name: volume_uom_name
+      type: char
+  weight_uom_name:
+    from:
+      name: weight_uom_name
+      type: char

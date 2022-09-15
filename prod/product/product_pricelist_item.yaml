@@ -1,0 +1,187 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: product_pricelist_item_%s
+fields:
+  applied_on:
+    from:
+      name: applied_on
+      type: selection
+    map_method: magic_map
+    to:
+      name: applied_on
+      type: selection
+  base:
+    from:
+      name: base
+      type: selection
+    map_method: magic_map
+    to:
+      name: base
+      type: selection
+  base_pricelist_id:
+    from:
+      name: base_pricelist_id
+      relation: product.pricelist
+      type: many2one
+    map_method: magic_map
+    to:
+      name: base_pricelist_id
+      relation: product.pricelist
+      type: many2one
+  categ_id:
+    from:
+      name: categ_id
+      relation: product.category
+      type: many2one
+    map_method: magic_map
+    to:
+      name: categ_id
+      relation: product.category
+      type: many2one
+  compute_price:
+    from:
+      name: compute_price
+      type: selection
+    map_method: magic_map
+    to:
+      name: compute_price
+      type: selection
+  date_end:
+    from:
+      name: date_end
+      type: date
+    map_method: magic_map
+    to:
+      name: date_end
+      type: datetime
+  date_start:
+    from:
+      name: date_start
+      type: date
+    map_method: magic_map
+    to:
+      name: date_start
+      type: datetime
+  fixed_price:
+    from:
+      name: fixed_price
+      type: float
+    map_method: magic_map
+    to:
+      name: fixed_price
+      type: float
+  min_quantity:
+    from:
+      name: min_quantity
+      type: integer
+    map_method: magic_map
+    to:
+      name: min_quantity
+      type: float
+  percent_price:
+    from:
+      name: percent_price
+      type: float
+    map_method: magic_map
+    to:
+      name: percent_price
+      type: float
+  price_discount:
+    from:
+      name: price_discount
+      type: float
+    map_method: magic_map
+    to:
+      name: price_discount
+      type: float
+  price_max_margin:
+    from:
+      name: price_max_margin
+      type: float
+    map_method: magic_map
+    to:
+      name: price_max_margin
+      type: float
+  price_min_margin:
+    from:
+      name: price_min_margin
+      type: float
+    map_method: magic_map
+    to:
+      name: price_min_margin
+      type: float
+  price_round:
+    from:
+      name: price_round
+      type: float
+    map_method: magic_map
+    to:
+      name: price_round
+      type: float
+  price_surcharge:
+    from:
+      name: price_surcharge
+      type: float
+    map_method: magic_map
+    to:
+      name: price_surcharge
+      type: float
+  pricelist_id:
+    from:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+    map_method: magic_map
+    to:
+      name: pricelist_id
+      relation: product.pricelist
+      type: many2one
+  product_id:
+    from:
+      name: product_id
+      relation: product.product
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_id
+      relation: product.product
+      type: many2one
+  product_tmpl_id:
+    from:
+      name: product_tmpl_id
+      relation: product.template
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_tmpl_id
+      relation: product.template
+      type: many2one
+model_from: product.pricelist.item
+model_to: product.pricelist.item
+no_match_fields:
+  active:
+    from:
+      name: active
+      type: boolean
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+  currency_id:
+    from:
+      name: currency_id
+      relation: res.currency
+      type: many2one
+  display_name:
+    from:
+      name: display_name
+      type: char
+  name:
+    from:
+      name: name
+      type: char
+  price:
+    from:
+      name: price
+      type: char
