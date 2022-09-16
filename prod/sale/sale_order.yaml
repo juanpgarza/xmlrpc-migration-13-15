@@ -148,18 +148,18 @@ fields:
     to:
       name: note
       type: html
-  # order_line:
-  #   from:
-  #     name: order_line
-  #     relation: sale.order.line
-  #     relation_field: order_id
-  #     type: one2many
-  #   map_method: magic_map
-  #   to:
-  #     name: order_line
-  #     relation: sale.order.line
-  #     relation_field: order_id
-  #     type: one2many
+  order_line:
+    from:
+      name: order_line
+      relation: sale.order.line
+      relation_field: order_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: order_line
+      relation: sale.order.line
+      relation_field: order_id
+      type: one2many
   origin:
     from:
       name: origin
@@ -168,6 +168,15 @@ fields:
     to:
       name: origin
       type: char
+  partner_id:
+    from:
+      name: partner_id
+      relation: res.partner
+      type: many2one
+    map_method: magic_map
+    to:
+      name: partner_id
+      type: many2one    
   # payment_term_id:
   #   from:
   #     name: payment_term_id
@@ -202,14 +211,14 @@ fields:
     to:
       name: signed_by
       type: char
-  signed_on:
-    from:
-      name: signed_on
-      type: datetime
-    map_method: magic_map
-    to:
-      name: signed_on
-      type: datetime
+  # signed_on:
+  #   from:
+  #     name: signed_on
+  #     type: datetime
+  #   map_method: magic_map
+  #   to:
+  #     name: signed_on
+  #     type: datetime
   # source_id:
   #   from:
   #     name: source_id

@@ -2,58 +2,58 @@ domain: []
 external_id_method: row_get_id
 external_id_nomenclature: product_template_%s
 fields:
-  activity_ids:
-    from:
-      name: activity_ids
-      relation: mail.activity
-      relation_field: res_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: activity_ids
-      relation: mail.activity
-      relation_field: res_id
-      type: one2many
-  activity_summary:
-    from:
-      name: activity_summary
-      type: char
-    map_method: magic_map
-    to:
-      name: activity_summary
-      type: char
-  activity_type_id:
-    from:
-      name: activity_type_id
-      relation: mail.activity.type
-      type: many2one
-    map_method: magic_map
-    to:
-      name: activity_type_id
-      relation: mail.activity.type
-      type: many2one
-  activity_user_id:
-    from:
-      name: activity_user_id
-      relation: res.users
-      type: many2one
-    map_method: magic_map
-    to:
-      name: activity_user_id
-      relation: res.users
-      type: many2one
-  attribute_line_ids:
-    from:
-      name: attribute_line_ids
-      relation: product.template.attribute.line
-      relation_field: product_tmpl_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: attribute_line_ids
-      relation: product.template.attribute.line
-      relation_field: product_tmpl_id
-      type: one2many
+  # activity_ids:
+  #   from:
+  #     name: activity_ids
+  #     relation: mail.activity
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_ids
+  #     relation: mail.activity
+  #     relation_field: res_id
+  #     type: one2many
+  # activity_summary:
+  #   from:
+  #     name: activity_summary
+  #     type: char
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_summary
+  #     type: char
+  # activity_type_id:
+  #   from:
+  #     name: activity_type_id
+  #     relation: mail.activity.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_type_id
+  #     relation: mail.activity.type
+  #     type: many2one
+  # activity_user_id:
+  #   from:
+  #     name: activity_user_id
+  #     relation: res.users
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: activity_user_id
+  #     relation: res.users
+  #     type: many2one
+  # attribute_line_ids:
+  #   from:
+  #     name: attribute_line_ids
+  #     relation: product.template.attribute.line
+  #     relation_field: product_tmpl_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: attribute_line_ids
+  #     relation: product.template.attribute.line
+  #     relation_field: product_tmpl_id
+  #     type: one2many
   barcode:
     from:
       name: barcode
@@ -138,40 +138,40 @@ fields:
     to:
       name: list_price
       type: float
-  message_follower_ids:
-    from:
-      name: message_follower_ids
-      relation: mail.followers
-      relation_field: res_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: message_follower_ids
-      relation: mail.followers
-      relation_field: res_id
-      type: one2many
-  message_ids:
-    from:
-      name: message_ids
-      relation: mail.message
-      relation_field: res_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: message_ids
-      relation: mail.message
-      relation_field: res_id
-      type: one2many
-  message_main_attachment_id:
-    from:
-      name: message_main_attachment_id
-      relation: ir.attachment
-      type: many2one
-    map_method: magic_map
-    to:
-      name: message_main_attachment_id
-      relation: ir.attachment
-      type: many2one
+  # message_follower_ids:
+  #   from:
+  #     name: message_follower_ids
+  #     relation: mail.followers
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: message_follower_ids
+  #     relation: mail.followers
+  #     relation_field: res_id
+  #     type: one2many
+  # message_ids:
+  #   from:
+  #     name: message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: message_ids
+  #     relation: mail.message
+  #     relation_field: res_id
+  #     type: one2many
+  # message_main_attachment_id:
+  #   from:
+  #     name: message_main_attachment_id
+  #     relation: ir.attachment
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: message_main_attachment_id
+  #     relation: ir.attachment
+  #     type: many2one
   name:
     from:
       name: name
@@ -180,16 +180,16 @@ fields:
     to:
       name: name
       type: char
-  packaging_ids:
-    from:
-      name: packaging_ids
-      relation: product.packaging
-      type: one2many
-    map_method: magic_map
-    to:
-      name: packaging_ids
-      relation: product.packaging
-      type: one2many
+  # packaging_ids:
+  #   from:
+  #     name: packaging_ids
+  #     relation: product.packaging
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: packaging_ids
+  #     relation: product.packaging
+  #     type: one2many
   price:
     from:
       name: price
@@ -236,18 +236,18 @@ fields:
     to:
       name: sale_ok
       type: boolean
-  seller_ids:
-    from:
-      name: seller_ids
-      relation: product.supplierinfo
-      relation_field: product_tmpl_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: seller_ids
-      relation: product.supplierinfo
-      relation_field: product_tmpl_id
-      type: one2many
+  # seller_ids:
+  #   from:
+  #     name: seller_ids
+  #     relation: product.supplierinfo
+  #     relation_field: product_tmpl_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: seller_ids
+  #     relation: product.supplierinfo
+  #     relation_field: product_tmpl_id
+  #     type: one2many
   sequence:
     from:
       name: sequence
@@ -284,18 +284,18 @@ fields:
       name: uom_po_id
       relation: uom.uom
       type: many2one
-  variant_seller_ids:
-    from:
-      name: variant_seller_ids
-      relation: product.supplierinfo
-      relation_field: product_tmpl_id
-      type: one2many
-    map_method: magic_map
-    to:
-      name: variant_seller_ids
-      relation: product.supplierinfo
-      relation_field: product_tmpl_id
-      type: one2many
+  # variant_seller_ids:
+  #   from:
+  #     name: variant_seller_ids
+  #     relation: product.supplierinfo
+  #     relation_field: product_tmpl_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: variant_seller_ids
+  #     relation: product.supplierinfo
+  #     relation_field: product_tmpl_id
+  #     type: one2many
   volume:
     from:
       name: volume
