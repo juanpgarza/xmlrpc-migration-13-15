@@ -1,0 +1,169 @@
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: stock_location_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  barcode:
+    from:
+      name: barcode
+      type: char
+    map_method: magic_map
+    to:
+      name: barcode
+      type: char
+  child_ids:
+    from:
+      name: child_ids
+      relation: stock.location
+      relation_field: location_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: child_ids
+      relation: stock.location
+      relation_field: location_id
+      type: one2many
+  comment:
+    from:
+      name: comment
+      type: text
+    map_method: magic_map
+    to:
+      name: comment
+      type: html
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+    map_method: magic_map
+    to:
+      name: company_id
+      relation: res.company
+      type: many2one
+  location_id:
+    from:
+      name: location_id
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: location_id
+      relation: stock.location
+      type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  parent_path:
+    from:
+      name: parent_path
+      type: char
+    map_method: magic_map
+    to:
+      name: parent_path
+      type: char
+  posx:
+    from:
+      name: posx
+      type: integer
+    map_method: magic_map
+    to:
+      name: posx
+      type: integer
+  posy:
+    from:
+      name: posy
+      type: integer
+    map_method: magic_map
+    to:
+      name: posy
+      type: integer
+  posz:
+    from:
+      name: posz
+      type: integer
+    map_method: magic_map
+    to:
+      name: posz
+      type: integer
+  putaway_rule_ids:
+    from:
+      name: putaway_rule_ids
+      relation: stock.putaway.rule
+      relation_field: location_in_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: putaway_rule_ids
+      relation: stock.putaway.rule
+      relation_field: location_in_id
+      type: one2many
+  quant_ids:
+    from:
+      name: quant_ids
+      relation: stock.quant
+      relation_field: location_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: quant_ids
+      relation: stock.quant
+      relation_field: location_id
+      type: one2many
+  removal_strategy_id:
+    from:
+      name: removal_strategy_id
+      relation: product.removal
+      type: many2one
+    map_method: magic_map
+    to:
+      name: removal_strategy_id
+      relation: product.removal
+      type: many2one
+  return_location:
+    from:
+      name: return_location
+      type: boolean
+    map_method: magic_map
+    to:
+      name: return_location
+      type: boolean
+  scrap_location:
+    from:
+      name: scrap_location
+      type: boolean
+    map_method: magic_map
+    to:
+      name: scrap_location
+      type: boolean
+  usage:
+    from:
+      name: usage
+      type: selection
+    map_method: magic_map
+    to:
+      name: usage
+      type: selection
+model_from: stock.location
+model_to: stock.location
+no_match_fields:
+  complete_name:
+    from:
+      name: complete_name
+      type: char
+  display_name:
+    from:
+      name: display_name
+      type: char

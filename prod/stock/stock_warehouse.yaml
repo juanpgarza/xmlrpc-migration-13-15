@@ -1,0 +1,264 @@
+domain: []
+external_id_method: same_external_id
+external_id_nomenclature: stock_warehouse_%s
+fields:
+  # active:
+  #   from:
+  #     name: active
+  #     type: boolean
+  #   map_method: magic_map
+  #   to:
+  #     name: active
+  #     type: boolean
+  # code:
+  #   from:
+  #     name: code
+  #     type: char
+  #   map_method: magic_map
+  #   to:
+  #     name: code
+  #     type: char
+  # crossdock_route_id:
+  #   from:
+  #     name: crossdock_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: crossdock_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  # delivery_route_id:
+  #   from:
+  #     name: delivery_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: delivery_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  # delivery_steps:
+  #   from:
+  #     name: delivery_steps
+  #     type: selection
+  #   map_method: magic_map
+  #   to:
+  #     name: delivery_steps
+  #     type: selection
+  # in_type_id:
+  #   from:
+  #     name: in_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: in_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  # int_type_id:
+  #   from:
+  #     name: int_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: int_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  # lot_stock_id:
+  #   from:
+  #     name: lot_stock_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: lot_stock_id
+  #     relation: stock.location
+  #     type: many2one
+  # mto_pull_id:
+  #   from:
+  #     name: mto_pull_id
+  #     relation: stock.rule
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: mto_pull_id
+  #     relation: stock.rule
+  #     type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  # out_type_id:
+  #   from:
+  #     name: out_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: out_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  # pack_type_id:
+  #   from:
+  #     name: pack_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: pack_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  # partner_id:
+  #   from:
+  #     name: partner_id
+  #     relation: res.partner
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: partner_id
+  #     relation: res.partner
+  #     type: many2one
+  # pick_type_id:
+  #   from:
+  #     name: pick_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: pick_type_id
+  #     relation: stock.picking.type
+  #     type: many2one
+  # reception_route_id:
+  #   from:
+  #     name: reception_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: reception_route_id
+  #     relation: stock.location.route
+  #     type: many2one
+  # reception_steps:
+  #   from:
+  #     name: reception_steps
+  #     type: selection
+  #   map_method: magic_map
+  #   to:
+  #     name: reception_steps
+  #     type: selection
+  # resupply_route_ids:
+  #   from:
+  #     name: resupply_route_ids
+  #     relation: stock.location.route
+  #     relation_field: supplied_wh_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: resupply_route_ids
+  #     relation: stock.location.route
+  #     relation_field: supplied_wh_id
+  #     type: one2many
+  # resupply_wh_ids:
+  #   from:
+  #     name: resupply_wh_ids
+  #     relation: stock.warehouse
+  #     type: many2many
+  #   map_method: magic_map
+  #   to:
+  #     name: resupply_wh_ids
+  #     relation: stock.warehouse
+  #     type: many2many
+  # route_ids:
+  #   from:
+  #     name: route_ids
+  #     relation: stock.location.route
+  #     type: many2many
+  #   map_method: magic_map
+  #   to:
+  #     name: route_ids
+  #     relation: stock.location.route
+  #     type: many2many
+  # sequence:
+  #   from:
+  #     name: sequence
+  #     type: integer
+  #   map_method: magic_map
+  #   to:
+  #     name: sequence
+  #     type: integer
+  # view_location_id:
+  #   from:
+  #     name: view_location_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: view_location_id
+  #     relation: stock.location
+  #     type: many2one
+  # wh_input_stock_loc_id:
+  #   from:
+  #     name: wh_input_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: wh_input_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  # wh_output_stock_loc_id:
+  #   from:
+  #     name: wh_output_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: wh_output_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  # wh_pack_stock_loc_id:
+  #   from:
+  #     name: wh_pack_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: wh_pack_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  # wh_qc_stock_loc_id:
+  #   from:
+  #     name: wh_qc_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: wh_qc_stock_loc_id
+  #     relation: stock.location
+  #     type: many2one
+model_from: stock.warehouse
+model_to: stock.warehouse
+no_match_fields:
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+  display_name:
+    from:
+      name: display_name
+      type: char
+  show_resupply:
+    from:
+      name: show_resupply
+      type: boolean
+  warehouse_count:
+    from:
+      name: warehouse_count
+      type: integer

@@ -255,13 +255,17 @@ class odoo_xmlrpc_migration(object):
         field_names = []
         for field_name in old_field_names:
             field_names.append(field_name)
+        # import pdb; pdb.set_trace()
         for ids in chunk:
             rows = self.read(plan['model_from'], ids,
                              field_names + after_save_fields)
+            # import pdb; pdb.set_trace()
             for row in rows:
+                # import pdb; pdb.set_trace()
                 data = self.map_data(plan, row, kwargs)
+                # import pdb; pdb.set_trace()
                 action, model, res_id = self.save(plan, data, row['id'], kwargs)
-
+                # import pdb; pdb.set_trace()
                 res_ids[action].append(res_id)
                 if len(after_save_fields) and res_id:
                     data = self.map_data(
@@ -310,7 +314,7 @@ class odoo_xmlrpc_migration(object):
         ext_id = external_id_method(
             plan, orig_id, xt_id)
 
-        if ext_id and len(ext_id):
+        if ext_id and len(ext_id):            
             if update is False: 
                 logging.debug("Ignoro update de %s " % ext_id)
 
@@ -330,10 +334,12 @@ class odoo_xmlrpc_migration(object):
                 logging.info('Writing %s %s' % (plan['model_to'], ext_id[0]['res_id']))
                 return ('write', plan['model_to'], ext_id)
             except xmlrpclib.Fault as e:
+                # import pdb; pdb.set_trace()
                 logging.error(e.faultCode)
                 return ('write', plan['model_to'], False)
 
         else:
+            # import pdb; pdb.set_trace()
             if create is False:
                 logging.debug("Ignoro creacion de %s " % orig_id)
                 return ('create', plan['model_to'], False)
@@ -354,6 +360,7 @@ class odoo_xmlrpc_migration(object):
                 return ('create', plan['model_to'], res_id)
             except xmlrpclib.Fault as e:
                 #print(e.faultCode)
+                # import pdb; pdb.set_trace()
                 logging.debug(e.faultCode)
                 return ('create', plan['model_to'], False)
 

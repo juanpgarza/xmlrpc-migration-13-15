@@ -76,6 +76,13 @@ fields:
     to:
       name: commitment_date
       type: datetime
+  date_order:
+    from:
+      name: date_order
+      type: datetime
+    to:
+      name: date_order
+      type: datetime    
   # company_id:
   #   from:
   #     name: company_id
@@ -140,6 +147,14 @@ fields:
   #     name: message_main_attachment_id
   #     relation: ir.attachment
   #     type: many2one
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
   note:
     from:
       name: note
@@ -229,6 +244,14 @@ fields:
   #     name: source_id
   #     relation: utm.source
   #     type: many2one
+  state:
+    from:
+      name: state
+      type: selection
+    map_method: magic_map
+    to:
+      name: state
+      type: selection
   # team_id:
   #   from:
   #     name: team_id
@@ -249,6 +272,14 @@ fields:
       name: user_id
       relation: res.users
       type: many2one
+  validity_date:
+    from:
+      name: validity_date
+      type: date
+    map_method: magic_map
+    to:
+      name: validity_date
+      type: date            
   # website_message_ids:
   #   from:
   #     name: website_message_ids
@@ -327,10 +358,6 @@ no_match_fields:
     from:
       name: currency_rate
       type: float
-  date_order:
-    from:
-      name: date_order
-      type: datetime
   display_name:
     from:
       name: display_name
@@ -447,7 +474,4 @@ no_match_fields:
     from:
       name: type_name
       type: char
-  validity_date:
-    from:
-      name: validity_date
-      type: date
+

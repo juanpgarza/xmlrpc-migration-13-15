@@ -1,0 +1,65 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: account_payment_term_%s
+fields:
+  active:
+    from:
+      name: active
+      type: boolean
+    map_method: magic_map
+    to:
+      name: active
+      type: boolean
+  # company_id:
+  #   from:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: company_id
+  #     relation: res.company
+  #     type: many2one
+  # line_ids:
+  #   from:
+  #     name: line_ids
+  #     relation: account.payment.term.line
+  #     relation_field: payment_id
+  #     type: one2many
+  #   map_method: magic_map
+  #   to:
+  #     name: line_ids
+  #     relation: account.payment.term.line
+  #     relation_field: payment_id
+  #     type: one2many
+  name:
+    from:
+      name: name
+      type: char
+    map_method: magic_map
+    to:
+      name: name
+      type: char
+  note:
+    from:
+      name: note
+      type: text
+    map_method: magic_map
+    to:
+      name: note
+      type: html
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer
+model_from: account.payment.term
+model_to: account.payment.term
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char

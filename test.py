@@ -2,7 +2,11 @@
 from odoo_xmlrpc_migration import odoo_xmlrpc_migration, mig_8_to_13, log_hash, modules_admin
 import l10n_ar_methods
 
-# ./odoo-bin -c .odoorc -d destino-z -i contacts,sale_management,stock,l10n_ar --load-language es_AR --without-demo=all
+# pip3 install git+https://github.com/pysimplesoap/pysimplesoap@e1453f385cee119bf8cfb53c763ef212652359f5
+# pip3 install git+https://github.com/ingadhoc/pyafipws@py3k
+
+# IMPORTANTE este l10n_ar_reports lo tengo que instalar en un paso posterior porque me da error en 2 modelos
+
 # Configurar:
 #           activar moneda ARS (solo informar en la cia)
 #           mostrar contabilidad completa
@@ -11,7 +15,22 @@ plan = odoo_xmlrpc_migration()
 #plan.migrate('res.users', domain=[('active', '=', True), ('share', '=', False)])
 plan.is_test = True
 
-plan.save_plan('sale.order.line')
+# plan.save_plan('account.payment.term')
+# plan.save_plan('account.payment.term.line')
+# plan.modules.append('account')
+# plan.migrate('account.payment.term.line')
+# plan.migrate('account.payment.term')
+# PROBLEMA = cuando se crea un plazo se crea auto. una linea (con días en 0). Ent. al migrar se duplica la línea.
+# ver si es necesario migrar y consultar con Filo
+
+# plan.save_plan('stock.picking.type')
+# plan.save_plan('stock.location')
+# plan.save_plan('stock.move')
+# plan.save_plan('stock.move.line')
+# plan.save_plan('res.company')
+# plan.save_plan('uom.uom')
+plan.save_plan('stock.warehouse')
+# stock.move.line
 
 # product.category
 

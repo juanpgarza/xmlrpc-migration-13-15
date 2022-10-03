@@ -1,0 +1,71 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: sale_order_line_%s
+fields:
+  move_ids:
+    from:
+      name: move_ids
+      relation: stock.move
+      relation_field: sale_line_id
+      type: one2many
+    map_method: magic_map
+    to:
+      name: move_ids
+      relation: stock.move
+      relation_field: sale_line_id
+      type: one2many
+  route_id:
+    from:
+      name: route_id
+      relation: stock.location.route
+      type: many2one
+    map_method: magic_map
+    to:
+      name: route_id
+      relation: stock.location.route
+      type: many2one
+model_from: sale.order.line
+model_to: sale.order.line
+no_match_fields:
+  display_qty_widget:
+    from:
+      name: display_qty_widget
+      type: boolean
+  free_qty_today:
+    from:
+      name: free_qty_today
+      type: float
+  is_mto:
+    from:
+      name: is_mto
+      type: boolean
+  product_packaging:
+    from:
+      name: product_packaging
+      relation: product.packaging
+      type: many2one
+  product_type:
+    from:
+      name: product_type
+      type: selection
+  qty_available_today:
+    from:
+      name: qty_available_today
+      type: float
+  qty_to_deliver:
+    from:
+      name: qty_to_deliver
+      type: float
+  scheduled_date:
+    from:
+      name: scheduled_date
+      type: datetime
+  virtual_available_at_date:
+    from:
+      name: virtual_available_at_date
+      type: float
+  warehouse_id:
+    from:
+      name: warehouse_id
+      relation: stock.warehouse
+      type: many2one

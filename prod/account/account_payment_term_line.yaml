@@ -1,0 +1,69 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: account_payment_term_line_%s
+fields:
+  day_of_the_month:
+    from:
+      name: day_of_the_month
+      type: integer
+    map_method: magic_map
+    to:
+      name: day_of_the_month
+      type: integer
+  days:
+    from:
+      name: days
+      type: integer
+    map_method: magic_map
+    to:
+      name: days
+      type: integer
+  option:
+    from:
+      name: option
+      type: selection
+    map_method: magic_map
+    to:
+      name: option
+      type: selection
+  payment_id:
+    from:
+      name: payment_id
+      relation: account.payment.term
+      type: many2one
+    map_method: magic_map
+    to:
+      name: payment_id
+      relation: account.payment.term
+      type: many2one
+  sequence:
+    from:
+      name: sequence
+      type: integer
+    map_method: magic_map
+    to:
+      name: sequence
+      type: integer
+  value:
+    from:
+      name: value
+      type: selection
+    map_method: magic_map
+    to:
+      name: value
+      type: selection
+  value_amount:
+    from:
+      name: value_amount
+      type: float
+    map_method: magic_map
+    to:
+      name: value_amount
+      type: float
+model_from: account.payment.term.line
+model_to: account.payment.term.line
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char

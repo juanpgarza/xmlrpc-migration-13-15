@@ -1,0 +1,17 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: stock_move_%s
+fields:
+  sale_line_id:
+    from:
+      name: sale_line_id
+      relation: sale.order.line
+      type: many2one
+    map_method: magic_map
+    to:
+      name: sale_line_id
+      relation: sale.order.line
+      type: many2one
+model_from: stock.move
+model_to: stock.move
+no_match_fields: []

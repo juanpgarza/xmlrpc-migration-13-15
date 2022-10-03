@@ -1,0 +1,247 @@
+domain: []
+external_id_method: row_get_id
+external_id_nomenclature: stock_move_line_%s
+fields:
+  company_id:
+    from:
+      name: company_id
+      relation: res.company
+      type: many2one
+    map_method: magic_map
+    to:
+      name: company_id
+      relation: res.company
+      type: many2one
+  consume_line_ids:
+    from:
+      name: consume_line_ids
+      relation: stock.move.line
+      type: many2many
+    map_method: magic_map
+    to:
+      name: consume_line_ids
+      relation: stock.move.line
+      type: many2many
+  date:
+    from:
+      name: date
+      type: datetime
+    map_method: magic_map
+    to:
+      name: date
+      type: datetime
+  description_picking:
+    from:
+      name: description_picking
+      type: text
+    map_method: magic_map
+    to:
+      name: description_picking
+      type: text
+  location_dest_id:
+    from:
+      name: location_dest_id
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: location_dest_id
+      relation: stock.location
+      type: many2one
+  location_id:
+    from:
+      name: location_id
+      relation: stock.location
+      type: many2one
+    map_method: magic_map
+    to:
+      name: location_id
+      relation: stock.location
+      type: many2one
+  lot_id:
+    from:
+      name: lot_id
+      relation: stock.production.lot
+      type: many2one
+    map_method: magic_map
+    to:
+      name: lot_id
+      relation: stock.production.lot
+      type: many2one
+  lot_name:
+    from:
+      name: lot_name
+      type: char
+    map_method: magic_map
+    to:
+      name: lot_name
+      type: char
+  # move_id:
+  #   from:
+  #     name: move_id
+  #     relation: stock.move
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: move_id
+  #     relation: stock.move
+  #     type: many2one
+  owner_id:
+    from:
+      name: owner_id
+      relation: res.partner
+      type: many2one
+    map_method: magic_map
+    to:
+      name: owner_id
+      relation: res.partner
+      type: many2one
+  package_id:
+    from:
+      name: package_id
+      relation: stock.quant.package
+      type: many2one
+    map_method: magic_map
+    to:
+      name: package_id
+      relation: stock.quant.package
+      type: many2one
+  package_level_id:
+    from:
+      name: package_level_id
+      relation: stock.package_level
+      type: many2one
+    map_method: magic_map
+    to:
+      name: package_level_id
+      relation: stock.package_level
+      type: many2one
+  # picking_id:
+  #   from:
+  #     name: picking_id
+  #     relation: stock.picking
+  #     type: many2one
+  #   map_method: magic_map
+  #   to:
+  #     name: picking_id
+  #     relation: stock.picking
+  #     type: many2one
+  produce_line_ids:
+    from:
+      name: produce_line_ids
+      relation: stock.move.line
+      type: many2many
+    map_method: magic_map
+    to:
+      name: produce_line_ids
+      relation: stock.move.line
+      type: many2many
+  product_id:
+    from:
+      name: product_id
+      relation: product.product
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_id
+      relation: product.product
+      type: many2one
+  product_qty:
+    from:
+      name: product_qty
+      type: float
+    map_method: magic_map
+    to:
+      name: product_uom_qty
+      type: float
+  product_uom_id:
+    from:
+      name: product_uom_id
+      relation: uom.uom
+      type: many2one
+    map_method: magic_map
+    to:
+      name: product_uom_id
+      relation: uom.uom
+      type: many2one
+  # product_uom_qty:
+  #   from:
+  #     name: product_uom_qty
+  #     type: float
+  #   map_method: magic_map
+  #   to:
+  #     name: product_uom_qty
+  #     type: float
+  qty_done:
+    from:
+      name: qty_done
+      type: float
+    map_method: magic_map
+    to:
+      name: qty_done
+      type: float
+  reference:
+    from:
+      name: reference
+      type: char
+    map_method: magic_map
+    to:
+      name: reference
+      type: char
+  result_package_id:
+    from:
+      name: result_package_id
+      relation: stock.quant.package
+      type: many2one
+    map_method: magic_map
+    to:
+      name: result_package_id
+      relation: stock.quant.package
+      type: many2one
+  state:
+    from:
+      name: state
+      type: selection
+    map_method: magic_map
+    to:
+      name: state
+      type: selection
+model_from: stock.move.line
+model_to: stock.move.line
+no_match_fields:
+  display_name:
+    from:
+      name: display_name
+      type: char
+  is_initial_demand_editable:
+    from:
+      name: is_initial_demand_editable
+      type: boolean
+  is_locked:
+    from:
+      name: is_locked
+      type: boolean
+  lots_visible:
+    from:
+      name: lots_visible
+      type: boolean
+  origin:
+    from:
+      name: origin
+      type: char
+  picking_type_entire_packs:
+    from:
+      name: picking_type_entire_packs
+      type: boolean
+  picking_type_use_create_lots:
+    from:
+      name: picking_type_use_create_lots
+      type: boolean
+  picking_type_use_existing_lots:
+    from:
+      name: picking_type_use_existing_lots
+      type: boolean
+  tracking:
+    from:
+      name: tracking
+      type: selection
